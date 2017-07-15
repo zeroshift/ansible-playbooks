@@ -53,7 +53,7 @@
   - name: VIM | Git clone vim plugins
     git:
       repo: "https://github.com/zeroshift/{{ item }}.git"
-      dest: "/home/{{ ansible_user_id }}/.vim/bundle/{{ item }}"
+      dest: "~/.vim/bundle/{{ item }}"
       recursive: yes
       update: yes
     with_items:
@@ -91,15 +91,16 @@
     tags:
       - zsh
 
-  - name: MISC | Sync misc configs
+  - name: MISC | Sync misc Linux configs
     synchronize:
       src: "files/{{ item }}_configs/"
-      dest: "/home/{{ ansible_user_id }}/.config/{{ item }}/"
+      dest: "~/.config/{{ item }}/"
     with_items:
       - dunst
       - i3
       - i3status
       - terminator
+    when: ansible_distribution != 'Darwin'
     tags:
       - misc
 
