@@ -47,6 +47,12 @@
     synchronize:
       src: files/vim_configs/vim/
       dest: ~/.vim/
+      #archive: no
+      #links: yes
+      #perms: yes
+      #recursive: yes
+      #times: no
+      #checksum: yes
     tags:
       - vim
 
