@@ -112,7 +112,7 @@
   tasks:
 
   # Software Install
-  - name: Install packages
+  - name: Install packages | MacOSX
     action: package name={{ item }} state=present
     with_items:
       - htop
@@ -121,6 +121,8 @@
       - vagrant
       - vim
       - zsh
+    become: no
+    when: ansible_distribution == 'MacOSX'
     tags:
       - pkgs
 
@@ -129,6 +131,8 @@
     with_items:
       - chrony
       - dunst
+      - htop
+      - ipython
       - lsof
       - openssh
       - ranger
@@ -137,13 +141,17 @@
       - strace
       - sudo
       - terminator
+      - tmux
+      - vagrant
       - virtualbox
+      - vim
       - vlc
+      - zsh
     when: ansible_distribution != 'MacOSX'
     tags:
       - pkgs
 
-  - name: Install packages | Gentoo
+  - name: Install packages | Gentoo specific
     action: package name={{ item }} state=present
     with_items:
       - app-emulation/virtualbox-modules
@@ -156,7 +164,7 @@
     tags:
       - pkgs
 
-  - name: Install packages | Arch
+  - name: Install packages | Arch specific
     action: package name={{ item }} state=present
     with_items:
       - nvidia-settings
