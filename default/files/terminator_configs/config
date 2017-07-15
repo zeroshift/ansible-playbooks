@@ -1,10 +1,19 @@
 [global_config]
-  dbus = False
   enabled_plugins = ActivityWatch, TerminalShot
   title_transmit_bg_color = "#c16ae9"
 [keybindings]
   next_tab = <Super>Tab
   prev_tab = <Shift><Super>Tab
+[profiles]
+  [[default]]
+    scrollbar_position = hidden
+    palette = "#4d6683:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#4d6683:#cb4b16:#79bf56:#fce94f:#606ec1:#c882ff:#3cb4aa:#fdf6e3"
+    font = DejaVu Sans Mono 11
+    background_image = None
+    use_system_font = False
+    foreground_color = "#839496"
+    copy_on_selection = True
+    background_color = "#002b36"
 [layouts]
   [[default]]
     [[[child0]]]
@@ -52,16 +61,45 @@
       title = Mutt
       type = Terminal
       uuid = b54ca1b8-45f5-40cb-be35-e9aaec6fde75
+  [[work]]
+    [[[child0]]]
+      fullscreen = False
+      maximised = False
+      order = 0
+      parent = ""
+      type = Window
+    [[[terminal2]]]
+      command = tmux a -d -t "work" || tmuxinator work
+      order = 0
+      parent = child0
+      profile = default
+      type = Terminal
+  [[mutt]]
+    [[[child0]]]
+      fullscreen = False
+      maximised = False
+      order = 0
+      parent = ""
+      type = Window
+    [[[terminal2]]]
+      command = 'tmux a -d -t "mutt" || tmux new-session -s "mutt" \; set -g status-right ""'
+      order = 0
+      parent = child0
+      profile = default
+      type = Terminal
+  [[tmux]]
+    [[[child0]]]
+      fullscreen = False
+      maximised = False
+      order = 0
+      parent = ""
+      type = Window
+    [[[terminal2]]]
+      command = 'tmux a -d -t "default" || tmux new-session -s "default"'
+      order = 0
+      parent = child0
+      profile = default
+      type = Terminal
 [plugins]
   [[ActivityWatch]]
     hush_period = 30.0
-[profiles]
-  [[default]]
-    background_color = "#002b36"
-    copy_on_selection = True
-    cursor_color = "#aaaaaa"
-    font = DejaVu Sans Mono 11
-    foreground_color = "#839496"
-    palette = "#4d6683:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#4d6683:#cb4b16:#79bf56:#fce94f:#606ec1:#c882ff:#3cb4aa:#fdf6e3"
-    scrollbar_position = hidden
-    use_system_font = False
