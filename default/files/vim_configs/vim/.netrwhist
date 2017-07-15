@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/Users/nprendergast/Workspace/git/puppet/modules/netmounts/manifests'
-let g:netrw_dirhist_2='/Users/nprendergast/Github/DRW/packer/centos/cent7u2_chip'
-let g:netrw_dirhist_3='/Users/nprendergast/Github/DRW/vagrantfiles/fedora'
-let g:netrw_dirhist_4='/Users/nprendergast/Github/DRW/vagrantfiles/fedora/17-trade-server-puppet'
-let g:netrw_dirhist_5='/Users/nprendergast/Github/DRW/ansible-infra/group-roles/autospreader_dev'
-let g:netrw_dirhist_6='/Users/nprendergast/Github/DRW/vagrantfiles/fedora/17-sirius-puppet'
-let g:netrw_dirhist_7='/Users/nprendergast/Github/DRW/ansible-infra/group-roles/chip_dev'
