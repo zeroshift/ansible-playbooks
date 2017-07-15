@@ -1,0 +1,184 @@
+---
+
+- hosts: all,localhost
+  connection: ssh
+  become: no
+
+  tasks:
+
+  # TMUX 
+  - name: TMUX | Git clone TPM
+    git:
+      repo: "https://github.com/zeroshift/tpm"
+      dest: "~/.tmux/plugins/tpm"
+      recursive: yes
+      update: yes
+    tags:
+      - tmux
+
+  - name: TMUX | Copy tmux.conf
+    copy:
+      src: files/tmux_configs/tmux.conf
+      dest: ~/.tmux.conf
+      mode: 0600
+      backup: yes
+    tags:
+      - tmux
+
+  - name: TMUX | Make ~/.tmuxinator
+    file:
+      path: ~/.tmuxinator
+      state: directory
+      mode: 0700
+    tags:
+      - tmux
+
+  # VIM
+  - name: VIM | Copy vimrc
+    copy:
+      src: files/vim_configs/vimrc
+      dest: ~/.vimrc
+      mode: 0600
+      backup: yes
+    tags:
+      - vim
+
+  - name: VIM | Sync Vim configs
+    synchronize:
+      src: files/vim_configs/vim/
+      dest: ~/.vim/
+    tags:
+      - vim
+
+  - name: VIM | Git clone vim plugins
+    git:
+      repo: "https://github.com/zeroshift/{{ item }}.git"
+      dest: "/home/{{ ansible_user_id }}/.vim/bundle/{{ item }}"
+      recursive: yes
+      update: yes
+    with_items:
+      - syntastic
+      - tabular
+      - vim-flake8
+      - vim-fugitive
+      - vim-gitgutter
+      - vim-puppet
+    tags:
+      - vim
+
+  # ZSH 
+  - name: ZSH | git clone zprezto
+    git:
+      repo: "https://github.com/zeroshift/prezto.git"
+      dest: "~/.zprezto"
+      recursive: yes
+      update: yes
+    tags:
+      - zsh
+
+  - name: ZSH | Link rc files
+    file:
+      src: "~/.zprezto/runcoms/{{ item }}"
+      dest: "~/.{{ item }}"
+      state: link
+    with_items:
+      - zlogin
+      - zlogout
+      - zpreztorc
+      - zprofile
+      - zshenv
+      - zshrc
+    tags:
+      - zsh
+
+  - name: MISC | Sync misc configs
+    synchronize:
+      src: "files/{{ item }}_configs/"
+      dest: "/home/{{ ansible_user_id }}/.config/{{ item }}/"
+    with_items:
+      - dunst
+      - i3
+      - i3status
+      - terminator
+    tags:
+      - misc
+
+
+- hosts: workstations,localhost
+  connection: local
+  become: yes
+
+  tasks:
+
+  # Software Install
+  - name: Install packages
+    action: package name={{ item }} state=present
+    with_items:
+      - htop
+      - ipython
+      - tmux
+      - vagrant
+      - vim
+      - zsh
+    tags:
+      - pkgs
+
+  - name: Install packages | Linux default
+    action: package name={{ item }} state=present
+    with_items:
+      - chrony
+      - dunst
+      - lsof
+      - openssh
+      - ranger
+      - rsync
+      - scrot
+      - strace
+      - sudo
+      - terminator
+      - virtualbox
+      - vlc
+    when: ansible_distribution != 'Darwin'
+    tags:
+      - pkgs
+
+  - name: Install packages | Gentoo
+    action: package name={{ item }} state=present
+    with_items:
+      - app-emulation/virtualbox-modules
+      - dev-python/pip
+      - dev-python/virtualenv
+      - media-fonts/dejavu
+      - media-fonts/ubuntu-font-family
+      - x11-apps/xhost
+    when: ansible_distribution == 'Gentoo'
+    tags:
+      - pkgs
+
+  - name: Install packages | Arch
+    action: package name={{ item }} state=present
+    with_items:
+      - nvidia-settings
+      - python-pip
+      - python-virtualenv
+      - ttf-dejavu
+      - ttf-ubuntu-font-family
+      - xorg-xhost
+    when: ansible_distribution == 'Archlinux'
+    tags:
+      - pkgs
+
+- hosts: servers
+  connection: ssh
+  become: no
+
+  tasks:
+
+  - name: BASH | Copy bashrc
+    copy:
+      src: "files/bash_configs/bashrc"
+      dest: "~/.bashrc"
+      mode: 0600
+      backup: yes
+    tags:
+      - bash

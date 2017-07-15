@@ -1,0 +1,128 @@
+# NPRENDERGAST
+
+## OSX
+#setw -g aggressive-resize off
+#bind-key -t vi-copy 'y' copy-pipe "pbcopy"
+## OSX
+
+bind-key m set-window-option synchronize-panes
+#bind-key n set-window-option synchronize-panes off
+bind-key v join-pane -s !
+bind-key b break-pane -t ':'
+bind-key @ command-prompt -p "create pane from:"  "join-pane -s ':%%'"
+bind-key % pipe-pane "exec cat >>$HOME/tmux_logs/#W_`date +%s`.log" \; display-message 'Started logging to $HOME/tmux_logs/#W_`date +%s`.log'
+bind-key 5 pipe-pane \; display-message 'Ended logging to $HOME/tmux_logs/#W_???.log'
+bind-key X lock-server
+
+set-option -g default-terminal "screen-256color"
+#set mouse-select-pane on
+
+# NPRENDERGAST
+# lower command delay
+set -sg escape-time 1
+# bind r to reloading the config file
+bind r source-file ~/.tmux.conf \; display "Reloaded tmux config file."
+# better mnemonics for splitting panes!
+bind | split-window -h
+bind - split-window -v
+# vim / xmonad style bindings for pane movement
+bind -r h select-pane -L
+bind -r j select-pane -D
+bind -r k select-pane -U
+bind -r l select-pane -R
+# vim / xmonad style bindings for window movement
+bind -r C-h select-window -t :-
+bind -r C-l select-window -t :+
+# shift-movement keys will resize panes
+bind -r H resize-pane -L 5
+bind -r J resize-pane -D 5
+bind -r K resize-pane -U 5
+bind -r L resize-pane -R 5
+## disable mouse support (at least while we're learning)
+#setw -g mode-mouse off
+#set -g mouse-select-pane off
+#set -g mouse-resize-pane off
+#set -g mouse-select-window off
+# configure contents of status bar
+#set -g status-utf8 on
+set -g status-left-length 40
+set -g status-left "#[fg=darkgreen]\"#S\""
+#set -g status-right "#[fg=green] #h | %d %b %R"
+set -g status-justify centre
+setw -g monitor-activity on
+set -g visual-activity on
+# navigate using vim-style keys
+setw -g mode-keys vi
+# copy/paste using vim-style keys
+bind Escape copy-mode
+unbind p
+bind p paste-buffer
+
+# COPY SETTINGS ARE DIFFERENT NOW
+#bind -t vi-copy 'v' begin-selection
+bind-key -Tcopy-mode-vi 'v' send -X begin-selection
+#bind -t vi-copy 'y' copy-selection
+bind-key -Tcopy-mode-vi 'y' send -X copy-selection
+
+# set up aliases for temporarily maximizing panes
+unbind Up
+bind Up new-window -d -n tmp \; swap-pane -s tmp.1 \; select-window -t tmp
+unbind Down
+bind Down last-window \; swap-pane -s tmp.1 \; kill-window -t tmp
+# set up alias for turning on logging
+bind P pipe-pane -o "cat >>~/#W.log" \; display "Toggled logging to ~/#W.log"
+
+# fix for terminal-notifier
+#set-option -g default-command "which reattach-to-user-namespace > /dev/null && reattach-to-user-namespace -l $SHELL || $SHELL"
+
+## tmux-resurrect
+#run-shell ~/extras/tmux-resurrect/resurrect.tmux
+
+# List of plugins
+# Supports `github_username/repo` or full git repo URLs
+set -g @tpm_plugins '              \
+  tmux-plugins/tpm                 \
+  tmux-plugins/tmux-sensible       \
+  jbnicolai/tmux-fpp               \
+'
+# Other examples:
+# github_username/plugin_name    \
+# git@github.com/user/plugin     \
+# git@bitbucket.com/user/plugin  \
+
+# Initializes TMUX plugin manager.
+# Keep this line at the very bottom of tmux.conf.
+run-shell '~/.tmux/plugins/tpm/tpm'
+
+#### COLOUR (Solarized dark)
+
+# default statusbar colors
+#set-option -g status-bg black #base02
+##set-option -g status-bg default #base02
+#set-option -g status-fg yellow #yellow
+#set-option -g status-attr default
+#
+## default window title colors
+#set-window-option -g window-status-fg brightblue #base0
+##set-window-option -g window-status-bg default
+##set-window-option -g window-status-attr dim
+#
+## active window title colors
+#set-window-option -g window-status-current-fg brightred #orange
+##set-window-option -g window-status-current-bg default
+##set-window-option -g window-status-current-attr bright
+#
+## pane border
+#set-option -g pane-border-fg black #base02
+#set-option -g pane-active-border-fg brightgreen #base01
+#
+## message text
+#set-option -g message-bg yellow #base02
+#set-option -g message-fg black #orange
+#
+## pane number display
+#set-option -g display-panes-active-colour blue #blue
+#set-option -g display-panes-colour brightred #orange
+#
+## clock
+#set-window-option -g clock-mode-colour green #green

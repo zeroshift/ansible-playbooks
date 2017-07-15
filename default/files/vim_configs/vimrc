@@ -1,0 +1,138 @@
+" Set color
+"colorscheme solarized
+colorscheme nxzbz
+
+set t_Co=16
+"let g:solarized_termcolors=256
+"let g:solarized_termtrans = 1
+
+"Powerline
+set rtp+=/usr/lib/python2.7/site-packages/powerline/bindings/vim
+"set rtp+=/usr/lib/python2.7/site-packages/Powerline-beta-py2.7.egg/powerline/bindings/vim
+
+if has('gui_running')
+    set guifont=DejaVu\ Sans\ Mono\ for\ Powerline
+    set background=light
+    colorscheme solarized
+else
+    set background=dark
+    set ttimeoutlen=10
+    augroup FastEscape
+        autocmd!
+        au InsertEnter * set timeoutlen=0
+        au InsertLeave * set timeoutlen=1000
+    augroup END
+endif
+
+" " Always show statusline on workstation
+" if hostname() == 'lmp-nprenderga1'
+"     set laststatus=2
+" endif
+
+"Synstastic isn't working. Bind to pyflakes check
+nmap <C-P> :!pyflakes % <CR>
+
+"Python autocomplete
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+
+" FreeBSD || MacOSX
+set nocompatible " Use Vim settings, rather then Vi settings
+set backspace=indent,eol,start " allow backspacing over everything
+set ruler " show the cursor position all the time
+set incsearch " do incremental searching
+set hlsearch " highlight the last used search pattern.
+
+"w!! write buffer to file as root
+cmap w!! w !sudo tee % >/dev/null
+
+" Natural Splitting
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+set splitbelow
+set splitright
+
+" Turn on spelling
+"map <F2> :set spell spelllang=en_us<cr>
+
+" pathogen
+execute pathogen#infect()
+
+" Tab completion
+inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+inoremap <S-tab> <c-x><c-o>
+
+function! InsertTabWrapper()
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<tab>"
+    else
+        return "\<c-p>"
+    endif
+endfunction
+
+" Tab spacing
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+
+" autoindent
+autocmd FileType perl set autoindent
+autocmd FileType ruby set autoindent
+autocmd FileType python set autoindent
+autocmd FileType python set smartindent
+
+" Code folding
+set foldmethod=marker
+nmap ,f 0v/{<CR>%zf
+
+"" Skel heading
+" Perl
+autocmd BufNewFile  *.pm        0r ~/.vim/skeleton.pm
+autocmd BufNewFile  *.pl        0r ~/.vim/skeleton.pl
+" Ruby
+autocmd BufNewFile  *.rb        0r ~/.vim/skeleton.rb
+" Python
+autocmd BufNewFile  *.py        0r ~/.vim/skeleton.py   
+
+" use visual bell instead of beeping
+"set vb
+
+" syntax highlighting
+syntax on
+
+" show line numbers
+"autocmd FileType perl set number
+
+" check perl code with :make
+autocmd FileType perl set makeprg=perl\ -c\ %\ $*
+autocmd FileType perl set errorformat=%f:%l:%m
+autocmd FileType perl set autowrite
+
+" dont use Q for Ex mode
+map Q :q
+
+" make tab in v mode ident code
+vmap <tab> >gv
+vmap <s-tab> <gv
+
+" make tab in normal mode ident code
+nmap <tab> I<tab><esc>
+nmap <s-tab> ^i<bs><esc>
+
+" comment/uncomment blocks of code (in vmode)
+vmap ,c :s/^/#/gi<Enter>
+vmap ,C :s/^#//gi<Enter>
+
+" syntax color complex things like @{${"foo"}}
+let perl_extended_vars = 1
+
+" Tidy selected lines (or entire file) with _t:
+nnoremap <silent> _t :%!perltidy -q<Enter>
+vnoremap <silent> _t :!perltidy -q<Enter>
+
+" Deparse obfuscated code
+nnoremap <silent> _d :.!perl -MO=Deparse 2>/dev/null<cr>
+vnoremap <silent> _d :!perl -MO=Deparse 2>/dev/null<cr>

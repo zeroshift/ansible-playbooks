@@ -1,0 +1,67 @@
+[global_config]
+  dbus = False
+  enabled_plugins = ActivityWatch, TerminalShot
+  title_transmit_bg_color = "#c16ae9"
+[keybindings]
+  next_tab = <Super>Tab
+  prev_tab = <Shift><Super>Tab
+[layouts]
+  [[default]]
+    [[[child0]]]
+      fullscreen = False
+      maximised = False
+      order = 0
+      parent = ""
+      type = Window
+    [[[terminal2]]]
+      order = 0
+      parent = child0
+      profile = default
+      type = Terminal
+  [[multi]]
+    [[[child0]]]
+      fullscreen = False
+      last_active_term = 3dbcd040-4437-4121-ba33-56951a84a508
+      last_active_window = True
+      maximised = True
+      order = 0
+      parent = ""
+      position = 0:24
+      size = 2560, 1525
+      title = nprendergast@wup-nprenderg01: ~
+      type = Window
+    [[[child1]]]
+      order = 0
+      parent = child0
+      position = 1704
+      ratio = 0.666927592955
+      type = HPaned
+    [[[terminal2]]]
+      command = tmux a -d -t "work" || tmuxinator work
+      order = 0
+      parent = child1
+      profile = default
+      title = Work
+      type = Terminal
+      uuid = 3dbcd040-4437-4121-ba33-56951a84a508
+    [[[terminal3]]]
+      command = 'tmux a -d -t "mutt" || tmux new-session -s "mutt" \; set -g status-right ""'
+      order = 1
+      parent = child1
+      profile = default
+      title = Mutt
+      type = Terminal
+      uuid = b54ca1b8-45f5-40cb-be35-e9aaec6fde75
+[plugins]
+  [[ActivityWatch]]
+    hush_period = 30.0
+[profiles]
+  [[default]]
+    background_color = "#002b36"
+    copy_on_selection = True
+    cursor_color = "#aaaaaa"
+    font = DejaVu Sans Mono 11
+    foreground_color = "#839496"
+    palette = "#4d6683:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#4d6683:#cb4b16:#79bf56:#fce94f:#606ec1:#c882ff:#3cb4aa:#fdf6e3"
+    scrollbar_position = hidden
+    use_system_font = False
