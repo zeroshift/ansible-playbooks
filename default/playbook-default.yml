@@ -107,7 +107,6 @@
 
 - hosts: workstations,localhost
   connection: local
-  become: yes
 
   tasks:
 
@@ -115,10 +114,9 @@
   - name: Install packages | MacOSX
     action: package name={{ item }} state=present
     with_items:
-      - htop
+      - htop-osx
       - ipython
       - tmux
-      - vagrant
       - vim
       - zsh
     become: no
@@ -128,6 +126,7 @@
 
   - name: Install packages | Linux default
     action: package name={{ item }} state=present
+    become: yes
     with_items:
       - chrony
       - dunst
@@ -153,6 +152,7 @@
 
   - name: Install packages | Gentoo specific
     action: package name={{ item }} state=present
+    become: yes
     with_items:
       - app-emulation/virtualbox-modules
       - dev-python/pip
@@ -166,6 +166,7 @@
 
   - name: Install packages | Arch specific
     action: package name={{ item }} state=present
+    become: yes
     with_items:
       - nvidia-settings
       - python-pip
