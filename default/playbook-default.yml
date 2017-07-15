@@ -100,7 +100,7 @@
       - i3
       - i3status
       - terminator
-    when: ansible_distribution != 'Darwin'
+    when: ansible_distribution != 'MacOSX'
     tags:
       - misc
 
@@ -139,7 +139,7 @@
       - terminator
       - virtualbox
       - vlc
-    when: ansible_distribution != 'Darwin'
+    when: ansible_distribution != 'MacOSX'
     tags:
       - pkgs
 
