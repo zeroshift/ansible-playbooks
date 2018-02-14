@@ -105,6 +105,11 @@
     tags:
       - zsh
 
+
+- hosts: workstations
+  connection: local
+
+  tasks:
   - name: MISC | Sync misc Linux configs
     synchronize:
       src: "files/{{ item }}_configs/"
@@ -117,12 +122,6 @@
     when: ansible_distribution != 'MacOSX'
     tags:
       - misc
-
-
-- hosts: workstations,localhost
-  connection: local
-
-  tasks:
 
   # Software Install
   - name: Install packages | MacOSX
@@ -142,25 +141,40 @@
     action: package name={{ item }} state=present
     become: yes
     with_items:
+      - borg
       - chrony
+      - cifs-utils
       - dunst
+      - feh
       - htop
+      - httpie
+      - i3lock
       - ipython
       - lsof
+      - mutt
+      - nfs-utils
+      - nmap
       - openssh
+      - python-pylint
       - ranger
+      - remmina
       - rsync
       - scrot
       - strace
       - sudo
       - terminator
+      - tilda
       - tmux
       - vagrant
-      - virtualbox
       - vim
+      - virtualbox
       - vlc
+      - w3m
+      - wget
+      - xclip
       - zsh
     when: ansible_distribution != 'MacOSX'
+    ignore_errors: true
     tags:
       - pkgs
 
@@ -182,11 +196,17 @@
     action: package name={{ item }} state=present
     become: yes
     with_items:
+      - noto-fonts
+      - noto-fonts-emoji
+      - noto-fonts-cjk
       - nvidia-settings
+      - pkgfile
       - python-pip
       - python-virtualenv
-      - ttf-dejavu
-      - ttf-ubuntu-font-family
+      - util-linux
+      - vim-runtime
+      - virtualbox-host-dkms
+      - wireshark-qt
       - xorg-xhost
     when: ansible_distribution == 'Archlinux'
     tags:
