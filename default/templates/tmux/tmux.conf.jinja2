@@ -1,29 +1,5 @@
 ### NPRENDERGAST ###
 
-# Taken from: 
-# https://stackoverflow.com/questions/35016458/how-to-write-if-statement-in-tmux-conf-to-set-different-options-for-different-t
-# Version-specific commands
-run-shell "tmux setenv -g TMUX_VERSION $(tmux -V | cut -c 6-)"
-
-if-shell -b '[ "$(echo "$TMUX_VERSION < 2.5" | bc)" = 1 ]' \
-  "bind -t vi-copy 'v' begin-selection; \
-    bind -t vi-copy 'y' copy-selection"
-
-if-shell -b '[ "$(echo "$TMUX_VERSION >= 2.5" | bc)" = 1 ]' \
-  "bind-key -Tcopy-mode-vi 'v' begin-selection; \
-     bind-key -Tcopy-mode-vi 'y' copy-selection"
-
-# UTF8 is autodetected in 2.2 onwards, but errors if explicitly set
-if-shell -b '[ "$(echo "$TMUX_VERSION < 2.2" | bc)" = 1 ]' \
-  "set -g utf8 on; set -g status-utf8 on; set -g mouse-utf8 on"
-
-if-shell -b '[ "$(which pbcopy &>/dev/null;echo $?)" = 1 ]' \
-  "bind -t vi-copy y copy-pipe 'xclip -selection clipboard >/dev/null'"
-
-if-shell -b '[ "$(which pbcopy &>/dev/null;echo $?)" = 0 ]' \
-  "setw -g aggressive-resize off; \
-    bind -t vi-copy y copy-pipe 'reattach-to-user-namespace pbcopy'"
-
 # Handle nested stuff better
 set -g status-bg green 
 setw -g window-status-current-bg green 
@@ -99,7 +75,7 @@ bind -r L resize-pane -R 5
 #set -g status-utf8 on
 set -g status-left-length 40
 set -g status-left "#[fg=darkgreen]\"#S\""
-#set -g status-right "#[fg=green] #h | %d %b %R"
+set -g status-right "#[fg=green]"
 set -g status-justify centre
 setw -g monitor-activity on
 set -g visual-activity on
@@ -110,13 +86,24 @@ bind Escape copy-mode
 unbind p
 bind p paste-buffer
 
-## OLD SETTINGS
-##bind -t vi-copy 'v' begin-selection
-##bind-key -Tcopy-mode-vi 'v' send -X begin-selection
-#bind-key -Tcopy-mode-vi 'v' begin-selection
-##bind -t vi-copy 'y' copy-selection
-##bind-key -Tcopy-mode-vi 'y' send -X copy-selection
-#bind-key -Tcopy-mode-vi 'y' copy-selection
+# Copy Settings
+{% if tmux_version.stdout|float < 2.5 %}
+bind -t vi-copy 'v' begin-selection
+bind -t vi-copy 'y' copy-selection
+{% else %}
+bind-key -T edit-mode-vi Up send-keys -X history-up
+bind-key -T edit-mode-vi Down send-keys -X history-down
+unbind-key -T copy-mode-vi Space     ;   bind-key -T copy-mode-vi v send-keys -X begin-selection
+unbind-key -T copy-mode-vi y         ;   bind-key -T copy-mode-vi y send-keys -X copy-selection
+{% if ansible_distribution == 'MacOSX' %}
+unbind-key -T copy-mode-vi Y         ;   bind-key -T copy-mode-vi Y send-keys -X copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"
+{% else %}
+unbind-key -T copy-mode-vi Y         ;   bind-key -T copy-mode-vi Y send-keys -X copy-pipe-and-cancel "xclip -selection clipboard >/dev/null"
+{% endif %}
+unbind-key -T copy-mode-vi C-v       ;   bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
+unbind-key -T copy-mode-vi [         ;   bind-key -T copy-mode-vi [ send-keys -X begin-selection
+unbind-key -T copy-mode-vi ]         ;   bind-key -T copy-mode-vi ] send-keys -X copy-selection
+{% endif %}
 
 # set up aliases for temporarily maximizing panes
 unbind Up

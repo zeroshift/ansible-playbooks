@@ -1,12 +1,20 @@
 ---
 
-- hosts: all,localhost
+- hosts: all
   connection: ssh
   become: no
 
   tasks:
 
   # TMUX 
+  - name: TMUX | Register tmux version
+    command: bash -c "tmux -V | grep -o '.\..'"
+    register: tmux_version
+    changed_when: False
+    check_mode: no
+    tags:
+      - tmux
+
   - name: TMUX | Git clone TPM
     git:
       repo: "https://github.com/zeroshift/tpm"
@@ -16,9 +24,9 @@
     tags:
       - tmux
 
-  - name: TMUX | Copy tmux.conf
-    copy:
-      src: files/tmux_configs/tmux.conf
+  - name: TMUX | Create tmux.conf
+    template:
+      src: templates/tmux/tmux.conf.jinja2
       dest: ~/.tmux.conf
       mode: 0600
       backup: yes
