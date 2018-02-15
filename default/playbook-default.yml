@@ -152,18 +152,26 @@
       - dunst
       - feh
       #- firefox
+      - fzf
+      - hardlink
       - htop
       - i3lock
       - ipython
+      - jq
+      - lbzip2
       - lsof
       - nfs-utils
       - nmap
       - openssh
+      - parallel
+      - pigz
+      #- qutebrowser
       - ranger
       - rsync
       - scrot
       - strace
       - sudo
+      - tcpdump
       - terminator
       - tilda
       - tmux
