@@ -141,23 +141,18 @@
     action: package name={{ item }} state=present
     become: yes
     with_items:
-      - borg
       - chrony
-      - cifs-utils
       - dunst
       - feh
+      #- firefox
       - htop
-      - httpie
       - i3lock
       - ipython
       - lsof
-      - mutt
       - nfs-utils
       - nmap
       - openssh
-      - python-pylint
       - ranger
-      - remmina
       - rsync
       - scrot
       - strace
@@ -166,12 +161,9 @@
       - tilda
       - tmux
       - vagrant
-      - vim
       - virtualbox
       - vlc
-      - w3m
       - wget
-      - xclip
       - zsh
     when: ansible_distribution != 'MacOSX'
     ignore_errors: true
@@ -182,12 +174,16 @@
     action: package name={{ item }} state=present
     become: yes
     with_items:
+      - app-backup/borgbackup
+      - app-editors/vim
       - app-emulation/virtualbox-modules
       - dev-python/pip
+      - dev-python/pylint
       - dev-python/virtualenv
-      - media-fonts/dejavu
-      - media-fonts/ubuntu-font-family
+      - media-fonts/noto
+      - media-fonts/source-pro
       - x11-apps/xhost
+      - x11-misc/xclip
     when: ansible_distribution == 'Gentoo'
     tags:
       - pkgs
@@ -196,17 +192,25 @@
     action: package name={{ item }} state=present
     become: yes
     with_items:
+      - borg
+      - cifs-utils
+      - httpie
+      - mutt
       - noto-fonts
       - noto-fonts-emoji
       - noto-fonts-cjk
       - nvidia-settings
       - pkgfile
       - python-pip
+      - python-pylint
       - python-virtualenv
+      - remmina
       - util-linux
       - vim-runtime
       - virtualbox-host-dkms
+      - w3m
       - wireshark-qt
+      - xclip
       - xorg-xhost
     when: ansible_distribution == 'Archlinux'
     tags:
