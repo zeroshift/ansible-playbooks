@@ -127,13 +127,20 @@
   - name: Install packages | MacOSX
     action: package name={{ item }} state=present
     with_items:
+      - grsync
       - htop-osx
+      - httpie
       - ipython
+      - nmap
+      - ssh-copy-id
+      - testdisk
       - tmux
       - vim
+      - wget
       - zsh
     become: no
     when: ansible_distribution == 'MacOSX'
+    ignore_errors: true
     tags:
       - pkgs
 
