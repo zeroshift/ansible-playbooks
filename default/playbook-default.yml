@@ -5,6 +5,14 @@
   become: no
 
   tasks:
+  # Git
+  - name: GIT | Make ~/git directory
+    file:
+      path: ~/git
+      state: directory
+      mode: 0700
+    tags:
+      - git
 
   # TMUX 
   - name: TMUX | Register tmux version
@@ -110,6 +118,14 @@
   connection: local
 
   tasks:
+  - name: MISC | Make ~/venv directory
+    file:
+      path: ~/venv
+      state: directory
+      mode: 0700
+    tags:
+      - misc
+
   - name: MISC | Sync misc Linux configs
     synchronize:
       src: "files/{{ item }}_configs/"
