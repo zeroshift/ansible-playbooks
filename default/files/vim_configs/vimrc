@@ -92,7 +92,7 @@ set tabstop=4
 autocmd FileType perl set autoindent
 autocmd FileType ruby set autoindent
 autocmd FileType python set autoindent
-autocmd FileType python set smartindent
+"autocmd FileType python set smartindent
 
 " Code folding
 set foldmethod=marker
