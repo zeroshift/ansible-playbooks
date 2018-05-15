@@ -73,7 +73,7 @@
       dest: ~/.vim/
       #archive: no
       #links: yes
-      #perms: yes
+      perms: no
       #recursive: yes
       #times: no
       #checksum: yes
