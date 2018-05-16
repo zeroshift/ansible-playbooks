@@ -37,6 +37,7 @@
       dest: "~/.tmux/plugins/tpm"
       recursive: yes
       update: yes
+    ignore_errors: True
     tags:
       - tmux
 
@@ -93,6 +94,7 @@
       - vim-fugitive
       - vim-gitgutter
       - vim-puppet
+    ignore_errors: True
     tags:
       - vim
 
@@ -103,6 +105,7 @@
       dest: "~/.zprezto"
       recursive: yes
       update: yes
+    ignore_errors: True
     tags:
       - zsh
 
