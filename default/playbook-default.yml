@@ -183,9 +183,12 @@
       - lsof
       - nfs-utils
       - nmap
+      - nvidia-settings
       - openssh
       - parallel
       - pigz
+      - python-pip
+      - python-virtualenv
       #- qutebrowser
       - ranger
       - rsync
@@ -206,26 +209,7 @@
     tags:
       - pkgs
 
-  - name: Install packages | Gentoo specific
-    action: package name={{ item }} state=present
-    become: yes
-    with_items:
-      - app-backup/borgbackup
-      - app-editors/vim
-      - app-emulation/virtualbox-modules
-      - dev-python/pip
-      - dev-python/pylint
-      - dev-python/virtualenv
-      - media-fonts/noto
-      - media-fonts/source-pro
-      - x11-wm/i3
-      - x11-apps/xhost
-      - x11-misc/xclip
-    when: ansible_distribution == 'Gentoo'
-    tags:
-      - pkgs
-
-  - name: Install packages | Arch specific
+  - name: Install packages | Arch-specific
     action: package name={{ item }} state=present
     become: yes
     with_items:
@@ -251,6 +235,46 @@
       - xclip
       - xorg-xhost
     when: ansible_distribution == 'Archlinux'
+    tags:
+      - pkgs
+
+  - name: Install packages | Arch-specific (AUR)
+    command: yaourt -S {{ item }} --noconfirm --needed
+    register: result
+    with_items:
+      - chromedriver
+      - google-chrome
+      - jre6
+      - jre7
+      - mattermost-desktop-bin
+      - minishift-bin
+      - nocache
+      - rundeck-cli
+      - tmuxinator
+      - vmtouch
+    when: ansible_distribution == 'Archlinux'
+    changed_when: result.stdout != ""
+    tags:
+      - pkgs
+      - yaourt
+
+  - name: Install packages | Gentoo specific
+    action: package name={{ item }} state=present
+    become: yes
+    with_items:
+      - app-backup/borgbackup
+      - app-editors/vim
+      - app-emulation/virtualbox-modules
+      - dev-python/pip
+      - dev-python/pylint
+      - dev-python/virtualenv
+      - media-fonts/noto
+      - media-fonts/source-pro
+      - net-im/mattermost-desktop-bin
+      - x11-wm/i3
+      - x11-apps/xhost
+      - x11-misc/xclip
+    when: ansible_distribution == 'Gentoo'
     tags:
       - pkgs
 
