@@ -172,10 +172,11 @@
       - compton
       - dunst
       - feh
-      #- firefox
+      - firefox
       - fzf
       - hardlink
       - htop
+      - i3
       - i3lock
       - ipython
       - jq
