@@ -176,7 +176,6 @@
       - fzf
       - hardlink
       - htop
-      - i3
       - i3lock
       - ipython
       - jq
@@ -219,6 +218,7 @@
       - dev-python/virtualenv
       - media-fonts/noto
       - media-fonts/source-pro
+      - x11-wm/i3
       - x11-apps/xhost
       - x11-misc/xclip
     when: ansible_distribution == 'Gentoo'
@@ -232,6 +232,7 @@
       - borg
       - cifs-utils
       - httpie
+      - i3-wm
       - mutt
       - noto-fonts
       - noto-fonts-emoji
