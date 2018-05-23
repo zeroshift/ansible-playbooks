@@ -169,6 +169,7 @@
     become: yes
     with_items:
       - chrony
+      - compton
       - dunst
       - feh
       #- firefox
