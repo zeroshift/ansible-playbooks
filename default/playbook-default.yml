@@ -173,7 +173,6 @@
       - dunst
       - feh
       - firefox
-      - fzf
       - hardlink
       - htop
       - i3lock
@@ -181,14 +180,11 @@
       - jq
       - lbzip2
       - lsof
+      - mattermost-desktop-bin
       - nfs-utils
       - nmap
-      - nvidia-settings
       - openssh
-      - parallel
       - pigz
-      - python-pip
-      - python-virtualenv
       #- qutebrowser
       - ranger
       - rsync
@@ -215,6 +211,7 @@
     with_items:
       - borg
       - cifs-utils
+      - fzf
       - httpie
       - i3-wm
       - mutt
@@ -222,6 +219,7 @@
       - noto-fonts-emoji
       - noto-fonts-cjk
       - nvidia-settings
+      - parallel
       - pkgfile
       - python-pip
       - python-pylint
@@ -246,7 +244,6 @@
       - google-chrome
       - jre6
       - jre7
-      - mattermost-desktop-bin
       - minishift-bin
       - nocache
       - rundeck-cli
@@ -270,7 +267,8 @@
       - dev-python/virtualenv
       - media-fonts/noto
       - media-fonts/source-pro
-      - net-im/mattermost-desktop-bin
+      - net-analyzer/wireshark
+      - sys-process/parallel
       - x11-wm/i3
       - x11-apps/xhost
       - x11-misc/xclip
