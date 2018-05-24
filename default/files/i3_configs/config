@@ -174,4 +174,4 @@ bar {
 exec dunst
 exec tilda
 exec setxkbmap -option ctrl:nocaps
-exec --no-startup-id compton
+exec --no-startup-id comptoni -G
