@@ -127,6 +127,7 @@
 
 - hosts: workstations
   connection: local
+  gather_facts: no
 
   tasks:
   # MISC
@@ -279,6 +280,7 @@
 - hosts: servers
   connection: ssh
   become: no
+  gather_facts: no
 
   tasks:
 
