@@ -1,0 +1,5 @@
+---
+# defaults file for base_directories
+
+git_repos_path: ~/git
+venv_path: ~/venv

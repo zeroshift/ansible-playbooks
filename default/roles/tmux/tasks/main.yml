@@ -1,0 +1,46 @@
+---
+
+- name: Install required packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - tmux
+    - git
+  tags:
+    - tmux
+
+- name: Register tmux version
+  command: bash -c "tmux -V | grep -o '.\..'"
+  register: tmux_version
+  changed_when: False
+  check_mode: no
+  tags:
+    - tmux
+
+- name: Git clone TPM
+  git:
+    repo: "https://github.com/zeroshift/tpm"
+    dest: "~/.tmux/plugins/tpm"
+    recursive: yes
+    update: yes
+  ignore_errors: True
+  tags:
+    - tmux
+
+- name: Create tmux.conf
+  template:
+    src: templates/tmux.conf.jinja2
+    dest: ~/.tmux.conf
+    mode: 0600
+    backup: yes
+  tags:
+    - tmux
+
+- name: Make ~/.tmuxinator
+  file:
+    path: ~/.tmuxinator
+    state: directory
+    mode: 0700
+  tags:
+    - tmux

@@ -4,125 +4,11 @@
   connection: ssh
   become: no
 
-  tasks:
-  # Git
-  - name: GIT | Make ~/git directory
-    file:
-      path: ~/git
-      state: directory
-      mode: 0700
-    tags:
-      - git
-
-  - name: VENV | Make ~/venv directory
-    file:
-      path: ~/venv
-      state: directory
-      mode: 0700
-    tags:
-      - pip
-
-  # TMUX 
-  - name: TMUX | Register tmux version
-    command: bash -c "tmux -V | grep -o '.\..'"
-    register: tmux_version
-    changed_when: False
-    check_mode: no
-    tags:
-      - tmux
-
-  - name: TMUX | Git clone TPM
-    git:
-      repo: "https://github.com/zeroshift/tpm"
-      dest: "~/.tmux/plugins/tpm"
-      recursive: yes
-      update: yes
-    ignore_errors: True
-    tags:
-      - tmux
-
-  - name: TMUX | Create tmux.conf
-    template:
-      src: templates/tmux/tmux.conf.jinja2
-      dest: ~/.tmux.conf
-      mode: 0600
-      backup: yes
-    tags:
-      - tmux
-
-  - name: TMUX | Make ~/.tmuxinator
-    file:
-      path: ~/.tmuxinator
-      state: directory
-      mode: 0700
-    tags:
-      - tmux
-
-  # VIM
-  - name: VIM | Copy vimrc
-    copy:
-      src: files/vim_configs/vimrc
-      dest: ~/.vimrc
-      mode: 0600
-      backup: yes
-    tags:
-      - vim
-
-  - name: VIM | Sync Vim configs
-    synchronize:
-      src: files/vim_configs/vim/
-      dest: ~/.vim/
-      #archive: no
-      #links: yes
-      perms: no
-      #recursive: yes
-      #times: no
-      #checksum: yes
-    tags:
-      - vim
-
-  - name: VIM | Git clone vim plugins
-    git:
-      repo: "https://github.com/zeroshift/{{ item }}.git"
-      dest: "~/.vim/bundle/{{ item }}"
-      recursive: yes
-      update: yes
-    with_items:
-      - syntastic
-      - tabular
-      - vim-flake8
-      - vim-fugitive
-      - vim-gitgutter
-      - vim-puppet
-    ignore_errors: True
-    tags:
-      - vim
-
-  # ZSH 
-  - name: ZSH | git clone zprezto
-    git:
-      repo: "https://github.com/zeroshift/prezto.git"
-      dest: "~/.zprezto"
-      recursive: yes
-      update: yes
-    ignore_errors: True
-    tags:
-      - zsh
-
-  - name: ZSH | Link rc files
-    file:
-      src: "~/.zprezto/runcoms/{{ item }}"
-      dest: "~/.{{ item }}"
-      state: link
-    with_items:
-      - zlogin
-      - zlogout
-      - zpreztorc
-      - zprofile
-      - zshenv
-      - zshrc
-    tags:
-      - zsh
+  roles:
+    - base_directories
+    - tmux
+    - vim
+    - zsh
 
 
 - hosts: workstations
@@ -130,9 +16,9 @@
   gather_facts: no
 
   tasks:
-  # MISC
+
   - name: MISC | Sync misc Linux configs
-    synchronize:
+    copy:
       src: "files/{{ item }}_configs/"
       dest: "~/.config/{{ item }}/"
     with_items:
@@ -144,138 +30,9 @@
     tags:
       - misc
 
-  # Software Install
-  - name: Install packages | MacOSX
-    action: package name={{ item }} state=present
-    with_items:
-      - grsync
-      - htop-osx
-      - httpie
-      - ipython
-      - nmap
-      - ssh-copy-id
-      - testdisk
-      - tmux
-      - vim
-      - wget
-      - zsh
-    become: no
-    when: ansible_distribution == 'MacOSX'
-    ignore_errors: true
-    tags:
-      - pkgs
+  roles:
+    - packages
 
-  - name: Install packages | Linux default
-    action: package name={{ item }} state=present
-    become: yes
-    with_items:
-      - chrony
-      - compton
-      - dunst
-      - feh
-      - firefox
-      - hardlink
-      - htop
-      - i3lock
-      - ipython
-      - jq
-      - lbzip2
-      - lsof
-      - mattermost-desktop-bin
-      - nfs-utils
-      - nmap
-      - openssh
-      - pigz
-      #- qutebrowser
-      - ranger
-      - rsync
-      - scrot
-      - strace
-      - sudo
-      - tcpdump
-      - terminator
-      - tilda
-      - tmux
-      - vagrant
-      - virtualbox
-      - vlc
-      - wget
-      - zsh
-    when: ansible_distribution != 'MacOSX'
-    ignore_errors: true
-    tags:
-      - pkgs
-
-  - name: Install packages | Arch-specific
-    action: package name={{ item }} state=present
-    become: yes
-    with_items:
-      - borg
-      - cifs-utils
-      - fzf
-      - httpie
-      - i3-wm
-      - mutt
-      - noto-fonts
-      - noto-fonts-emoji
-      - noto-fonts-cjk
-      - nvidia-settings
-      - parallel
-      - pkgfile
-      - python-pip
-      - python-pylint
-      - python-virtualenv
-      - remmina
-      - util-linux
-      - vim-runtime
-      - virtualbox-host-dkms
-      - w3m
-      - wireshark-qt
-      - xclip
-      - xorg-xhost
-    when: ansible_distribution == 'Archlinux'
-    tags:
-      - pkgs
-
-  - name: Install packages | Arch-specific (AUR)
-    command: yaourt -S {{ item }} --noconfirm --needed
-    register: result
-    with_items:
-      - chromedriver
-      - google-chrome
-      - jre6
-      - jre7
-      - minishift-bin
-      - nocache
-      - rundeck-cli
-      - tmuxinator
-      - vmtouch
-    when: ansible_distribution == 'Archlinux'
-    changed_when: result.stdout != ""
-    tags:
-      - pkgs
-      - yaourt
-
-  - name: Install packages | Gentoo specific
-    action: package name={{ item }} state=present
-    become: yes
-    with_items:
-      - app-backup/borgbackup
-      - app-editors/vim
-      - app-emulation/virtualbox-modules
-      - dev-python/pip
-      - dev-python/pylint
-      - dev-python/virtualenv
-      - media-fonts/noto
-      - media-fonts/source-pro
-      - net-analyzer/wireshark
-      - sys-process/parallel
-      - x11-wm/i3
-      - x11-apps/xhost
-      - x11-misc/xclip
-    when: ansible_distribution == 'Gentoo'
-    tags:
-      - pkgs
 
 - hosts: servers
   connection: ssh
@@ -291,4 +48,4 @@
       mode: 0600
       backup: yes
     tags:
-      - bash
+      - misc

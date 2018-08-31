@@ -1,0 +1,44 @@
+---
+
+- name: Install required packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - vim
+    - git
+  tags:
+    - git
+
+- name: Copy vimrc
+  copy:
+    src: files/vimrc
+    dest: ~/.vimrc
+    mode: 0600
+    backup: yes
+  tags:
+    - vim
+
+- name: Copy vim configs
+  copy:
+    src: files/vim/
+    dest: ~/.vim/
+  tags:
+    - vim
+
+- name: Git clone vim plugins
+  git:
+    repo: "https://github.com/zeroshift/{{ item }}.git"
+    dest: "~/.vim/bundle/{{ item }}"
+    recursive: yes
+    update: yes
+  with_items:
+    - syntastic
+    - tabular
+    - vim-flake8
+    - vim-fugitive
+    - vim-gitgutter
+    - vim-puppet
+  ignore_errors: True
+  tags:
+    - vim

@@ -1,0 +1,212 @@
+---
+
+- name: MacOSX
+  package:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - grsync
+      - htop-osx
+      - httpie
+      - ipython
+      - nmap
+      - ssh-copy-id
+      - testdisk
+      - tmux
+      - vim
+      - wget
+      - zsh
+  become: no
+  when: ansible_distribution == 'MacOSX'
+  ignore_errors: true
+  tags:
+    - pkgs
+
+- name: Linux default
+  package:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items:
+    - chrony
+    - git
+    - hardlink
+    - htop
+    - ipython
+    - jq
+    - lbzip2
+    - lsof
+    - nmap
+    - pigz
+    - ranger
+    - rsync
+    - strace
+    - sudo
+    - tcpdump
+    - tmux
+    - wget
+    - zsh
+  when: ansible_distribution != 'MacOSX'
+  ignore_errors: true
+  tags:
+    - pkgs
+
+- name: Linux default (GUI)
+  package:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items:
+    - compton
+    - dunst
+    - feh
+    - i3lock
+    - qutebrowser
+    - scrot
+    - terminator
+    - tilda
+    - vagrant
+    - virtualbox
+    - vlc
+  when:
+    - ansible_distribution != 'MacOSX'
+    - ansible_os_family != 'Debian'
+  ignore_errors: true
+  tags:
+    - pkgs
+
+- name: Debian-specific
+  package:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items:
+    - nfs-common
+    - openssh-server
+    - openssh-client
+  when: ansible_os_family == 'Debian'
+  ignore_errors: true
+  tags:
+    - pkgs
+
+- name: Install makepkg dependencies (Arch)
+  pacman:
+    name: "{{ packages }}"
+  become: yes
+  when: ansible_distribution == 'Archlinux'
+  vars:
+    packages:
+      - git
+      - binutils
+      - fakeroot
+      - make
+      - gcc
+  tags:
+    - pkgs
+    - yay
+
+- name: Clone Yay (Arch)
+  git:
+    repo: "https://aur.archlinux.org/yay.git"
+    dest: "~/git/yay"
+    update: no
+  become: no
+  when: ansible_distribution == 'Archlinux'
+  tags:
+    - pkgs
+    - yay
+
+- name: Install Yay (Arch)
+  shell: "cd ~/git/yay; yes | makepkg -si"
+  args:
+    creates: /usr/sbin/yay
+  become: no
+  when: ansible_distribution == 'Archlinux'
+  tags:
+    - pkgs
+    - yay
+
+- name: Arch-specific
+  pacman:
+    name: "{{ packages }}"
+    state: present
+  become: yes
+  vars:
+    packages:
+      - borg
+      - cifs-utils
+      - firefox
+      - fzf
+      - httpie
+      - i3-wm
+      - mutt
+      - nfs-utils
+      - noto-fonts
+      - noto-fonts-emoji
+      - noto-fonts-cjk
+      - nvidia-settings
+      - openssh
+      - parallel
+      - pkgfile
+      - python-pip
+      - python-pylint
+      - python-virtualenv
+      - remmina
+      - util-linux
+      - vim-runtime
+      - virtualbox-host-dkms
+      - w3m
+      - wireshark-qt
+      - xclip
+      - xorg-xhost
+  when: ansible_distribution == 'Archlinux'
+  tags:
+    - pkgs
+
+- name: Arch-specific (AUR)
+  command: "yay -S {{ item }} --noconfirm --needed"
+  register: result
+  with_items:
+    - chromedriver
+    - google-chrome
+    - jre6
+    - jre7
+    - mattermost-desktop-bin
+    - minishift-bin
+    - nocache
+    - rundeck-cli
+    - tmuxinator
+    - vmtouch
+  when: ansible_distribution == 'Archlinux'
+  changed_when: result.stdout != ""
+  become: no
+  tags:
+    - pkgs
+    - yay
+
+- name: Gentoo specific
+  package:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items:
+    - firefox
+    - nfs-utils
+    - openssh
+    - app-backup/borgbackup
+    - app-editors/vim
+    - app-emulation/virtualbox-modules
+    - dev-python/pip
+    - dev-python/pylint
+    - dev-python/virtualenv
+    - media-fonts/noto
+    - media-fonts/source-pro
+    - net-analyzer/wireshark
+    - sys-process/parallel
+    - x11-wm/i3
+    - x11-apps/xhost
+    - x11-misc/xclip
+  when: ansible_distribution == 'Gentoo'
+  tags:
+    - pkgs
