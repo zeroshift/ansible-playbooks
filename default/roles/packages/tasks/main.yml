@@ -191,19 +191,20 @@
     state: present
   become: yes
   with_items:
-    - firefox
-    - nfs-utils
-    - openssh
     - app-backup/borgbackup
     - app-editors/vim
     - app-emulation/virtualbox-modules
     - dev-python/pip
     - dev-python/pylint
     - dev-python/virtualenv
+    - media-fonts/liberation-fonts
     - media-fonts/noto
     - media-fonts/source-pro
     - net-analyzer/wireshark
+    - net-fs/nfs-utils
+    - net-misc/openssh
     - sys-process/parallel
+    - www-client/firefox
     - x11-wm/i3
     - x11-apps/xhost
     - x11-misc/xclip
