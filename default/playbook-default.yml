@@ -1,19 +1,7 @@
 ---
 
-- hosts: all
-  connection: ssh
-  become: no
-
-  roles:
-    - base_directories
-    - tmux
-    - vim
-    - zsh
-
-
 - hosts: workstations
   connection: local
-  gather_facts: no
 
   tasks:
 
@@ -32,6 +20,17 @@
 
   roles:
     - packages
+
+
+- hosts: all
+  connection: ssh
+  become: no
+
+  roles:
+    - base_directories
+    - tmux
+    - vim
+    - zsh
 
 
 - hosts: servers

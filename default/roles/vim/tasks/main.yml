@@ -1,15 +1,5 @@
 ---
 
-- name: Install required packages
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - vim
-    - git
-  tags:
-    - git
-
 - name: Copy vimrc
   copy:
     src: files/vimrc

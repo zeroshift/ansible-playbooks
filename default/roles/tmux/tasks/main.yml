@@ -1,15 +1,5 @@
 ---
 
-- name: Install required packages
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - tmux
-    - git
-  tags:
-    - tmux
-
 - name: Register tmux version
   command: bash -c "tmux -V | grep -o '.\..'"
   register: tmux_version

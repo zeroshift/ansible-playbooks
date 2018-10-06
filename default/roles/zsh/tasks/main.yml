@@ -1,13 +1,5 @@
 ---
 
-- name: Install required packages
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - zsh
-    - git
-
 - name: Clone zprezto
   git:
     repo: "https://github.com/zeroshift/prezto.git"
