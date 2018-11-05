@@ -3,22 +3,13 @@
 
 "Syntastic
 colorscheme nxzbz
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
+"if &diff
+"    colorscheme delek
+"endif
 
 set t_Co=16
 "let g:solarized_termcolors=256
 "let g:solarized_termtrans = 1
-
-"Powerline
-set rtp+=/usr/lib/python2.7/site-packages/powerline/bindings/vim
-"set rtp+=/usr/lib/python2.7/site-packages/Powerline-beta-py2.7.egg/powerline/bindings/vim
 
 if has('gui_running')
     set guifont=DejaVu\ Sans\ Mono\ for\ Powerline
@@ -33,11 +24,6 @@ else
         au InsertLeave * set timeoutlen=1000
     augroup END
 endif
-
-" " Always show statusline on workstation
-" if hostname() == 'lmp-nprenderga1'
-"     set laststatus=2
-" endif
 
 "Synstastic isn't working. Bind to pyflakes check
 nmap <C-P> :!pyflakes % <CR>
