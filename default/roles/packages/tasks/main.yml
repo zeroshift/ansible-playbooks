@@ -1,5 +1,22 @@
 ---
 
+- name: OSX | Upgrade pip
+  pip:
+    name: pip
+    extra_args: "--upgrade"
+  become: no
+  when: ansible_distribution == 'MacOSX'
+  tags:
+    - pkgs
+
+- name: OSX | Install virtualenv
+  pip:
+    name: virtualenv
+  become: no
+  when: ansible_distribution == 'MacOSX'
+  tags:
+    - pkgs
+
 - name: OSX | Tap casks
   homebrew_cask:
     name: "{{ casks }}"
@@ -10,6 +27,7 @@
       - docker
       - firefox
       - google-chrome
+      - oracle-jdk
       - vagrant
   become: no
   when: ansible_distribution == 'MacOSX'
