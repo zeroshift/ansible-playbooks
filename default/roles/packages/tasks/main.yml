@@ -47,6 +47,7 @@
       - hub
       - httpie
       - ipython
+      - mutt
       - nmap
       - ssh-copy-id
       - testdisk
