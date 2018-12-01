@@ -3,6 +3,9 @@
 - hosts: workstations
   connection: local
 
+  roles:
+    - packages
+
   tasks:
 
   - name: MISC | Sync misc Linux configs
@@ -17,9 +20,6 @@
     when: ansible_distribution != 'MacOSX'
     tags:
       - misc
-
-  roles:
-    - packages
 
 
 - hosts: all
