@@ -1,11 +1,29 @@
 ---
 
+- name: OSX | Tap casks
+  homebrew_cask:
+    name: "{{ casks }}"
+    state: present
+  vars:
+    casks:
+      - chromedriver
+      - docker
+      - firefox
+      - google-chrome
+      - vagrant
+  become: no
+  when: ansible_distribution == 'MacOSX'
+  ignore_errors: true
+  tags:
+    - pkgs
+
 - name: MacOSX
-  package:
+  homebrew:
     name: "{{ packages }}"
     state: present
   vars:
     packages:
+      - git
       - grsync
       - htop-osx
       - hub
