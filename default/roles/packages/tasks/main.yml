@@ -8,6 +8,7 @@
     packages:
       - grsync
       - htop-osx
+      - hub
       - httpie
       - ipython
       - nmap
