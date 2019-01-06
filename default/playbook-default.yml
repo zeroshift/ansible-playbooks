@@ -18,9 +18,17 @@
       - i3status
       - terminator
     when: ansible_distribution != 'MacOSX'
+    become: no
     tags:
       - misc
 
+  - name: MISC | Ensure options in streamlink config
+    blockinfile:
+      path: ~/.config/streamlink/config
+      block: |
+        # Player options
+        player=mpv
+        player-no-close
 
 - hosts: all
   connection: ssh
