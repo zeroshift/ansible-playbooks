@@ -1,0 +1,61 @@
+---
+
+- name: OSX | Upgrade pip
+  pip:
+    name: pip
+    extra_args: "--upgrade"
+  become: no
+  ignore_errors: true
+  tags:
+    - pkgs
+
+- name: OSX | Install virtualenv
+  pip:
+    name: virtualenv
+  become: no
+  ignore_errors: true
+  tags:
+    - pkgs
+
+- name: OSX | Tap casks
+  homebrew_cask:
+    name: "{{ casks }}"
+    state: present
+  vars:
+    casks:
+      - chromedriver
+      - docker
+      - firefox
+      - google-chrome
+      - iterm2
+      - oracle-jdk
+      - vagrant
+  become: no
+  ignore_errors: true
+  tags:
+    - pkgs
+
+- name: MacOSX-specific 
+  homebrew:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - git
+      - grsync
+      - htop-osx
+      - hub
+      - httpie
+      - ipython
+      - mutt
+      - nmap
+      - ssh-copy-id
+      - testdisk
+      - tmux
+      - vim
+      - wget
+      - zsh
+  become: no
+  ignore_errors: true
+  tags:
+    - pkgs

@@ -1,0 +1,59 @@
+---
+
+- name: Linux default
+  package:
+    name: "{{ packages }}"
+    state: present
+  become: yes
+  vars:
+    packages:
+      - chrony
+      - git
+      - hardlink
+      - htop
+      - ipython
+      - jq
+      - lbzip2
+      - lsof
+      - mpv
+      - nmap
+      - pigz
+      - ranger
+      - redshift
+      - rsync
+      - strace
+      - streamlink
+      - sudo
+      - tcpdump
+      - tmux
+      - wget
+      - zsh
+  when: ansible_distribution != 'MacOSX'
+  ignore_errors: true
+  tags:
+    - pkgs
+
+- name: Linux default (GUI)
+  package:
+    name: "{{ gui_packages }}"
+    state: present
+  become: yes
+  vars:
+    gui_packages:
+      - compton
+      - dunst
+      - feh
+      - i3lock
+      - qutebrowser
+      - scrot
+      - terminator
+      - tilda
+      - vagrant
+      - virtualbox
+      - vlc
+  when:
+    - ansible_distribution != 'MacOSX'
+    - ansible_os_family != 'Debian'
+  ignore_errors: true
+  tags:
+    - pkgs

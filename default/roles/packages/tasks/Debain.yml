@@ -1,0 +1,16 @@
+---
+
+- name: Debian-specific
+  package:
+    name: "{{ debian_packages}}"
+    state: present
+  become: yes
+  vars:
+    debian_packages:
+      - nfs-common
+      - openssh-server
+      - openssh-client
+  when: ansible_os_family == 'Debian'
+  ignore_errors: true
+  tags:
+    - pkgs

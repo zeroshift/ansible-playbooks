@@ -1,0 +1,96 @@
+---
+
+- name: Install makepkg dependencies (Arch)
+  pacman:
+    name: "{{ makepkg_packages }}"
+  become: yes
+  when: ansible_distribution == 'Archlinux'
+  vars:
+    makepkg_packages:
+      - git
+      - binutils
+      - fakeroot
+      - make
+      - gcc
+  tags:
+    - pkgs
+    - yay
+
+- name: Clone Yay (Arch)
+  git:
+    repo: "https://aur.archlinux.org/yay.git"
+    dest: "~/git/yay"
+    update: no
+  become: no
+  when: ansible_distribution == 'Archlinux'
+  tags:
+    - pkgs
+    - yay
+
+- name: Install Yay (Arch)
+  shell: "cd ~/git/yay; yes | makepkg -si"
+  args:
+    creates: /usr/sbin/yay
+  become: no
+  when: ansible_distribution == 'Archlinux'
+  tags:
+    - pkgs
+    - yay
+
+- name: Arch-specific
+  pacman:
+    name: "{{ arch_packages }}"
+    state: present
+  become: yes
+  vars:
+    arch_packages:
+      - borg
+      - cifs-utils
+      - firefox
+      - fzf
+      - httpie
+      - i3-wm
+      - mutt
+      - nfs-utils
+      - noto-fonts
+      - noto-fonts-emoji
+      - noto-fonts-cjk
+      - nvidia-settings
+      - openssh
+      - parallel
+      - pkgfile
+      - python-pip
+      - python-pylint
+      - python-virtualenv
+      - remmina
+      - util-linux
+      - vim-runtime
+      - virtualbox-host-dkms
+      - w3m
+      - wireshark-qt
+      - xclip
+      - xorg-xhost
+  when: ansible_distribution == 'Archlinux'
+  tags:
+    - pkgs
+
+- name: Arch-specific (AUR)
+  command: "yay -S {{ item }} --noconfirm --needed"
+  register: result
+  with_items:
+    - chromedriver
+    - google-chrome
+    - jre6
+    - jre7
+    - mattermost-desktop-bin
+    - minishift-bin
+    - nocache
+    - rundeck-cli
+    - tmuxinator
+    - vmtouch
+  when: ansible_distribution == 'Archlinux'
+  changed_when: result.stdout != ""
+  become: no
+  tags:
+    - pkgs
+    - yay

@@ -1,0 +1,30 @@
+---
+
+- name: Gentoo specific
+  package:
+    name: "{{ gentoo_packages }}"
+    state: present
+  become: yes
+  vars:
+    gentoo_packages:
+      - app-backup/borgbackup
+      - app-editors/vim
+      - app-emulation/virtualbox-modules
+      - dev-python/pip
+      - dev-python/pylint
+      - dev-python/virtualenv
+      - media-fonts/liberation-fonts
+      - media-fonts/noto
+      - media-fonts/source-pro
+      - net-analyzer/wireshark
+      - net-fs/nfs-utils
+      - net-misc/openssh
+      - sys-fs/ncdu
+      - sys-process/parallel
+      - www-client/firefox
+      - x11-apps/xhost
+      - x11-misc/xclip
+      - x11-wm/i3
+  when: ansible_distribution == 'Gentoo'
+  tags:
+    - pkgs
