@@ -25,6 +25,7 @@
   - name: MISC | Ensure options in streamlink config
     blockinfile:
       path: ~/.config/streamlink/config
+      create: yes
       block: |
         # Player options
         player=mpv
