@@ -47,6 +47,8 @@
       - oracle-jdk
       - streamlink-twitch-gui
       - vagrant
+      - virtualbox
+      - virtualbox-extension-pack
   become: no
   ignore_errors: true
 
