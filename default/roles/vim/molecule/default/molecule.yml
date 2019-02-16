@@ -6,8 +6,8 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: archlinux
-    image: base/archlinux:latest
+#   - name: archlinux
+#     image: base/archlinux:latest
   - name: centos7
     image: centos:7
   - name: ubuntu

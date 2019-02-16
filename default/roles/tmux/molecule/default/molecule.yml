@@ -6,14 +6,15 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: archlinux
-    image: base/archlinux:latest
   - name: centos7
-    image: centos:7
+    image: geerlingguy/docker-centos7-ansible:latest
+    pre_build_image: true
   - name: ubuntu
-    image: ubuntu:xenial
-#   - name: gentoo
-#     image: gentoo/stage3-amd64-nomultilib
+    image: geerlingguy/docker-ubuntu1804-ansible:latest
+    pre_build_image: true
+#   - name: debian
+#     image: geerlingguy/docker-debian9-ansible:latest
+#     pre_build_image: true
 provisioner:
   name: ansible
   lint:
@@ -24,5 +25,6 @@ scenario:
   name: default
 verifier:
   name: testinfra
+  enabled: false
   lint:
     name: flake8

@@ -1,9 +1,0 @@
----
-- name: Prepare
-  hosts: all
-  gather_facts: no
-  tasks:
-
-    - name: Install python (WHY???)
-      raw: "sudo pacman -Syy python --noconfirm || sudo apt -y install python || sudo yum -y install python || sudo emerge python"
-      ignore_errors: yes
