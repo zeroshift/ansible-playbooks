@@ -1,5 +1,12 @@
 ---
 
+- name: Install python2
+  homebrew:
+    name: python2
+    state: present
+  become: no
+  ignore_errors: true
+
 - name: OSX | Upgrade pip
   pip:
     name: pip
@@ -13,6 +20,16 @@
   become: no
   ignore_errors: true
 
+- name: OSX | Install molecule
+  pip:
+    name: "{{ modules }}"
+  become: no
+  vars:
+    modules:
+      - 'molecule[docker]'
+      - 'docker'
+  ignore_errors: true
+
 - name: OSX | Tap casks
   homebrew_cask:
     name: "{{ casks }}"
@@ -20,11 +37,15 @@
   vars:
     casks:
       - chromedriver
+      - discord
       - docker
       - firefox
       - google-chrome
+      - iina
       - iterm2
+      - mattermost
       - oracle-jdk
+      - streamlink-twitch-gui
       - vagrant
   become: no
   ignore_errors: true
