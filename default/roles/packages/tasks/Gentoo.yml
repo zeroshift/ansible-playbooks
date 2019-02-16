@@ -26,5 +26,3 @@
       - x11-misc/xclip
       - x11-wm/i3
   when: ansible_distribution == 'Gentoo'
-  tags:
-    - pkgs

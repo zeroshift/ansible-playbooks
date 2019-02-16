@@ -30,8 +30,6 @@
       - zsh
   when: ansible_distribution != 'MacOSX'
   ignore_errors: true
-  tags:
-    - pkgs
 
 - name: Linux default (GUI)
   package:
@@ -55,5 +53,3 @@
     - ansible_distribution != 'MacOSX'
     - ansible_os_family != 'Debian'
   ignore_errors: true
-  tags:
-    - pkgs

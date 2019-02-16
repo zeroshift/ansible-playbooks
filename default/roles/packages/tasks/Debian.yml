@@ -12,5 +12,3 @@
       - openssh-client
   when: ansible_os_family == 'Debian'
   ignore_errors: true
-  tags:
-    - pkgs

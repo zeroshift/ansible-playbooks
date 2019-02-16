@@ -6,15 +6,11 @@
     dest: ~/.vimrc
     mode: 0600
     backup: yes
-  tags:
-    - vim
 
 - name: Copy vim configs
   copy:
     src: files/vim/
     dest: ~/.vim/
-  tags:
-    - vim
 
 - name: Git clone vim plugins
   git:
@@ -30,5 +26,3 @@
     - vim-gitgutter
     - vim-puppet
   ignore_errors: True
-  tags:
-    - vim

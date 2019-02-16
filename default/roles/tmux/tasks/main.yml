@@ -5,8 +5,6 @@
   register: tmux_version
   changed_when: False
   check_mode: no
-  tags:
-    - tmux
 
 - name: Git clone TPM
   git:
@@ -15,8 +13,6 @@
     recursive: yes
     update: yes
   ignore_errors: True
-  tags:
-    - tmux
 
 - name: Create tmux.conf
   template:
@@ -24,13 +20,9 @@
     dest: ~/.tmux.conf
     mode: 0600
     backup: yes
-  tags:
-    - tmux
 
 - name: Make ~/.tmuxinator
   file:
     path: ~/.tmuxinator
     state: directory
     mode: 0700
-  tags:
-    - tmux

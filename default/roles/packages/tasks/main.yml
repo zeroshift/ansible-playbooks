@@ -5,14 +5,3 @@
 
 - include_tasks: "{{ ansible_distribution }}.yml"
   when: ansible_distribution == "MacOSX" or ansible_distribution == "Debain" or ansible_distribution == "Archlinux" or ansible_distribution == "Gentoo"
-
-#- name: ALL | Install python apps/modules
-#  pip:
-#    name: "{{ modules }}"
-#    extra_args: --user
-#  become: no
-#  vars:
-#    modules:
-#      - livestreamer
-#  tags:
-#    - pkgs

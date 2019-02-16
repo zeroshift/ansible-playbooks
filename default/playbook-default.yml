@@ -4,7 +4,8 @@
   connection: local
 
   roles:
-    - packages
+    - role: packages
+      tags: [ 'pkgs' ]
 
   tasks:
 
@@ -36,11 +37,14 @@
   become: no
 
   roles:
-    - base_directories
-    - tmux
-    - vim
-    - zsh
-
+    - role: base_directories
+      tags: [ 'git', 'venv' ]
+    - role: tmux
+      tags: [ 'tmux' ]
+    - role: vim
+      tags: [ 'vim' ]
+    - role: zsh
+      tags: [ 'zsh' ]
 
 - hosts: servers
   connection: ssh

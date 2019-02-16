@@ -6,16 +6,12 @@
     extra_args: "--upgrade"
   become: no
   ignore_errors: true
-  tags:
-    - pkgs
 
 - name: OSX | Install virtualenv
   pip:
     name: virtualenv
   become: no
   ignore_errors: true
-  tags:
-    - pkgs
 
 - name: OSX | Tap casks
   homebrew_cask:
@@ -32,10 +28,8 @@
       - vagrant
   become: no
   ignore_errors: true
-  tags:
-    - pkgs
 
-- name: MacOSX-specific 
+- name: MacOSX-specific
   homebrew:
     name: "{{ packages }}"
     state: present
@@ -57,5 +51,3 @@
       - zsh
   become: no
   ignore_errors: true
-  tags:
-    - pkgs

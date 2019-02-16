@@ -5,13 +5,9 @@
     path: "{{ git_repos_path }}"
     state: directory
     mode: 0700
-  tags:
-    - git
 
 - name: VENV | Make "{{ venv_path }}" directory
   file:
     path: "{{ venv_path }}"
     state: directory
     mode: 0700
-  tags:
-    - venv

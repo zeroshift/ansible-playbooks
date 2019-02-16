@@ -12,9 +12,6 @@
       - fakeroot
       - make
       - gcc
-  tags:
-    - pkgs
-    - yay
 
 - name: Clone Yay (Arch)
   git:
@@ -23,9 +20,6 @@
     update: no
   become: no
   when: ansible_distribution == 'Archlinux'
-  tags:
-    - pkgs
-    - yay
 
 - name: Install Yay (Arch)
   shell: "cd ~/git/yay; yes | makepkg -si"
@@ -33,9 +27,6 @@
     creates: /usr/sbin/yay
   become: no
   when: ansible_distribution == 'Archlinux'
-  tags:
-    - pkgs
-    - yay
 
 - name: Arch-specific
   pacman:
@@ -71,8 +62,6 @@
       - xclip
       - xorg-xhost
   when: ansible_distribution == 'Archlinux'
-  tags:
-    - pkgs
 
 - name: Arch-specific (AUR)
   command: "yay -S {{ item }} --noconfirm --needed"
@@ -91,6 +80,3 @@
   when: ansible_distribution == 'Archlinux'
   changed_when: result.stdout != ""
   become: no
-  tags:
-    - pkgs
-    - yay

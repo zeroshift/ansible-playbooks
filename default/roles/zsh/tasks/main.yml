@@ -7,8 +7,6 @@
     recursive: yes
     update: yes
   ignore_errors: True
-  tags:
-    - zsh
 
 - name: Link rc files
   file:
@@ -22,5 +20,10 @@
     - zprofile
     - zshenv
     - zshrc
-  tags:
-    - zsh
+
+# - name: chsh on OSX
+#   user:
+#     name: "{{ ansible_user_id }}"
+#     shell: /bin/zsh
+#   when: ansible_distribution == "MacOSX"
+#   become: yes
