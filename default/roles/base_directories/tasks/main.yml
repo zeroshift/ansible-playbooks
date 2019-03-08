@@ -6,6 +6,15 @@
     state: directory
     mode: 0700
 
+- name: MISC | Make ~/.local/bin directory
+  file:
+    path: ~/.local/bin
+    state: directory
+    mode: 0700
+    recurse: yes
+  tags:
+    - git
+
 - name: VENV | Make "{{ venv_path }}" directory
   file:
     path: "{{ venv_path }}"

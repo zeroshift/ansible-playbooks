@@ -17,8 +17,26 @@
       - dunst
       - i3
       - i3status
-      - terminator
+      # - terminator
     when: ansible_distribution != 'MacOSX'
+    become: no
+    tags:
+      - misc
+
+  - name: DOTFILES | Sync terminator Linux configs
+    copy:
+      src: "files/terminator_configs/config"
+      dest: "~/.config/terminator/config"
+    when: ansible_distribution != 'Ubuntu'
+    become: no
+    tags:
+      - misc
+
+  - name: DOTFILES | Sync terminator Linux configs (Ubuntu)
+    copy:
+      src: "files/terminator_configs/config.Ubuntu"
+      dest: "~/.config/terminator/config"
+    when: ansible_distribution == 'Ubuntu'
     become: no
     tags:
       - misc

@@ -1,7 +1,7 @@
 ---
 
 - name: Debian-specific
-  package:
+  apt:
     name: "{{ debian_packages}}"
     state: present
   become: yes
@@ -10,5 +10,46 @@
       - nfs-common
       - openssh-server
       - openssh-client
-  when: ansible_os_family == 'Debian'
   ignore_errors: true
+
+- name: Debian-specific
+  apt:
+    name: "{{ deb_packages }}"
+    state: present
+  become: yes
+  vars:
+    deb_packages:
+      - borgbackup
+      - cifs-utils
+      - chromium-chromedriver
+      - firefox
+      # - fzf
+      - httpie
+      - i3-wm
+      - mutt
+      - nfs-common
+      - fonts-noto
+      - fonts-noto-color-emoji
+      - fonts-noto-cjk
+      - freerdp-x11
+      - google-chrome-stable
+      - mattermost-desktop
+      - nocache
+      - nvidia-settings
+      - openssh-client
+      - openssh-server
+      - parallel
+      - python-pip
+      - pylint
+      - python-virtualenv
+      - remmina
+      - terminator
+      - tmuxinator
+      - util-linux
+      - vim-runtime
+      - virtualbox-dkms
+      - vmtouch
+      - w3m
+      - wireshark-qt
+      - xclip
+      - x11-xserver-utils

@@ -51,5 +51,5 @@
       - vlc
   when:
     - ansible_distribution != 'MacOSX'
-    - ansible_os_family != 'Debian'
+    - ansible_distribution != 'Debian'
   ignore_errors: true
