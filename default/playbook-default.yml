@@ -27,7 +27,9 @@
     copy:
       src: "files/terminator_configs/config"
       dest: "~/.config/terminator/config"
-    when: ansible_distribution != 'Ubuntu'
+    when:
+      - ansible_distribution != 'Ubuntu'
+      - ansible_distribution != 'MacOSX'
     become: no
     tags:
       - misc
@@ -36,7 +38,9 @@
     copy:
       src: "files/terminator_configs/config.Ubuntu"
       dest: "~/.config/terminator/config"
-    when: ansible_distribution == 'Ubuntu'
+    when:
+      - ansible_distribution == 'Ubuntu'
+      - ansible_distribution != 'MacOSX'
     become: no
     tags:
       - misc
