@@ -23,9 +23,6 @@ provisioner:
   name: ansible
   lint:
     name: ansible-lint
-    # TODO: Check out specific version from git
-    options:
-      x: ["ANSIBLE0004"]
 scenario:
   name: default
 verifier:

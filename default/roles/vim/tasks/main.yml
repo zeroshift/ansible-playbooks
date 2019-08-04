@@ -14,16 +14,28 @@
 
 - name: Git clone vim plugins
   git:
-    repo: "https://github.com/zeroshift/{{ item }}.git"
-    dest: "~/.vim/bundle/{{ item }}"
+    repo: "https://github.com/{{ item.repo }}/{{ item.name }}.git"
+    dest: "~/.vim/bundle/{{ item.name }}"
+    version: "{{ item.version }}"
     recursive: yes
     update: yes
   loop:
-    - ale
-    - syntastic
-    - tabular
-    - vim-flake8
-    - vim-fugitive
-    - vim-gitgutter
-    - vim-puppet
+    - name: ale
+      repo: 'dense-analysis'
+      version: 'v2.5.0'
+    - name: tabular
+      repo: godlygeek
+      version: '339091ac4dd1f17e225fe7d57b48aff55f99b23a'
+    - name: vim-flake8
+      repo: nvie
+      version: 'ce9ac790430699d346aa074d7f339f2e738284e3'
+    - name: vim-fugitive
+      repo: tpope
+      version: 'v2.5'
+    - name: vim-gitgutter
+      repo: airblade
+      version: 'c75c83df531881008f8cf903eab7cd68bc19ff7a'
+    - name: vim-puppet
+      repo: rodjek
+      version: 'b2ae19b3ef397ed7404bf15051cbc5ff655b893e'
   ignore_errors: True

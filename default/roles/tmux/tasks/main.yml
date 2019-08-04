@@ -12,8 +12,9 @@
 
 - name: Git clone TPM
   git:
-    repo: "https://github.com/zeroshift/tpm"
+    repo: "https://github.com/tmux-plugins/tpm"
     dest: "~/.tmux/plugins/tpm"
+    version: '26d9ace1b47f4591b2afdf333442a498311b6ace'
     recursive: yes
     update: yes
   ignore_errors: True
