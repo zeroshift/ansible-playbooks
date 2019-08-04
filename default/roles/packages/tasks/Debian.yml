@@ -1,18 +1,6 @@
 ---
 
-- name: Debian-specific
-  apt:
-    name: "{{ debian_packages}}"
-    state: present
-  become: yes
-  vars:
-    debian_packages:
-      - nfs-common
-      - openssh-server
-      - openssh-client
-  ignore_errors: true
-
-- name: Debian-specific
+- name: Debian/Ubuntu-specific
   apt:
     name: "{{ deb_packages }}"
     state: present
@@ -21,35 +9,58 @@
     deb_packages:
       - borgbackup
       - cifs-utils
-      - chromium-chromedriver
-      - firefox
       # - fzf
       - httpie
+      - nfs-common
+      - nocache
+      - openssh-client
+      - openssh-server
+      - nfs-common
+      - parallel
+      - python-pip
+      - pylint
+      - python-virtualenv
+      - ranger
+      - tmuxinator
+      - util-linux
+      - vim-runtime
+
+
+- name: Debian/Ubuntu-specific (GUI)
+  apt:
+    name: "{{ deb_packages }}"
+    state: present
+  become: yes
+  vars:
+    deb_packages:
+      - chromium-chromedriver
+      - firefox
       - i3-wm
       - mutt
-      - nfs-common
       - fonts-noto
       - fonts-noto-color-emoji
       - fonts-noto-cjk
       - freerdp-x11
       - google-chrome-stable
-      - mattermost-desktop
-      - nocache
+      # - slack 
       - nvidia-settings
-      - openssh-client
-      - openssh-server
-      - parallel
-      - python-pip
-      - pylint
-      - python-virtualenv
       - remmina
       - terminator
-      - tmuxinator
-      - util-linux
-      - vim-runtime
+      - vagrant
+      - virtualbox
       - virtualbox-dkms
-      - vmtouch
       - w3m
       - wireshark-qt
       - xclip
       - x11-xserver-utils
+  when: gui|bool
+
+- name: Ubuntu-specific
+  apt:
+    name: "{{ ubu_packages }}"
+    state: present
+  become: yes
+  vars:
+    ubu_packages:
+      - vmtouch
+  when: ansible_distribution == "Ubuntu"

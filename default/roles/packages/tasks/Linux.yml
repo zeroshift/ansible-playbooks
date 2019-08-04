@@ -15,14 +15,10 @@
       - jq
       - lbzip2
       - lsof
-      - mpv
       - nmap
       - pigz
-      - ranger
-      - redshift
       - rsync
       - strace
-      - streamlink
       - sudo
       - tcpdump
       - tmux
@@ -41,15 +37,17 @@
       - compton
       - dunst
       - feh
+      - firefox
       - i3lock
-      - qutebrowser
+      - mpv
+      - redshift
       - scrot
+      - streamlink
       - terminator
       - tilda
-      - vagrant
-      - virtualbox
       - vlc
   when:
     - ansible_distribution != 'MacOSX'
     - ansible_distribution != 'Debian'
+    - gui|bool
   ignore_errors: true

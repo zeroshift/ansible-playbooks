@@ -1,24 +1,40 @@
 ---
 
-- hosts: workstations
-  connection: local
-
+- hosts: workstations:personal_servers
   roles:
     - role: packages
       tags: [ 'pkgs' ]
 
   tasks:
 
+  - name: Get installed packages
+    package_facts:
+      manager: auto
+    check_mode: no
+    tags: misc
+
   - name: MISC | Sync misc Linux configs
     copy:
       src: "files/{{ item }}_configs/"
       dest: "~/.config/{{ item }}/"
-    with_items:
+    loop:
       - dunst
       - i3
-      - i3status
       # - terminator
-    when: ansible_distribution != 'MacOSX'
+    when:
+      - ansible_distribution != 'MacOSX'
+      - gui|bool
+    become: no
+    tags:
+      - misc
+
+  - name: MISC | Sync misc Linux configs (templates)
+    template:
+      src: "templates/{{ item.name }}_{{ item.config }}.j2"
+      dest: "~/.config/{{ item.name }}/{{ item.config }}"
+    loop:
+      - { name: 'i3status', config: 'config' }
+    when: item.name in ansible_facts.packages
     become: no
     tags:
       - misc
@@ -30,6 +46,7 @@
     when:
       - ansible_distribution != 'Ubuntu'
       - ansible_distribution != 'MacOSX'
+      - gui|bool
     become: no
     tags:
       - misc
@@ -40,7 +57,6 @@
       dest: "~/.config/terminator/config"
     when:
       - ansible_distribution == 'Ubuntu'
-      - ansible_distribution != 'MacOSX'
     become: no
     tags:
       - misc
@@ -53,6 +69,7 @@
         # Player options
         player=mpv
         player-no-close
+    when: gui|bool
 
 - hosts: all
   connection: ssh

@@ -13,7 +13,7 @@
     src: "~/.zprezto/runcoms/{{ item }}"
     dest: "~/.{{ item }}"
     state: link
-  with_items:
+  loop:
     - zlogin
     - zlogout
     - zpreztorc

@@ -5,6 +5,8 @@ driver:
   name: docker
 lint:
   name: yamllint
+  options:
+    config-file: ../../../.yamllint
 platforms:
   - name: centos7
     image: geerlingguy/docker-centos7-ansible:latest
@@ -12,13 +14,16 @@ platforms:
   - name: ubuntu
     image: geerlingguy/docker-ubuntu1804-ansible:latest
     pre_build_image: true
-#   - name: debian
-#     image: geerlingguy/docker-debian9-ansible:latest
-#     pre_build_image: true
+  # Can't test on Gentoo with no systemd,
+  # and cant change locale in the container without it
+  # - name: debian
+  #   image: geerlingguy/docker-debian9-ansible:latest
+  #   pre_build_image: true
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
+    # TODO: Check out specific version from git
     options:
       x: ["ANSIBLE0004"]
 scenario:

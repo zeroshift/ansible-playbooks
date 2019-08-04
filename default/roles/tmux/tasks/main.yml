@@ -1,7 +1,11 @@
 ---
 
 - name: Register tmux version
-  command: bash -c "tmux -V | grep -o '.\..'"
+  shell: >
+    set -o pipefail
+    tmux -V | awk '{ print $NF }'
+  args:
+    executable: /bin/bash
   register: tmux_version
   changed_when: False
   check_mode: no

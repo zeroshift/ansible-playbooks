@@ -22,9 +22,11 @@
   when: ansible_distribution == 'Archlinux'
 
 - name: Install Yay (Arch)
-  shell: "cd ~/git/yay; yes | makepkg -si"
+  shell: "set -o pipefail; yes | makepkg -si"
   args:
+    executable: /bin/bash
     creates: /usr/sbin/yay
+    chdir: "~/git/yay"
   become: no
   when: ansible_distribution == 'Archlinux'
 
@@ -37,7 +39,6 @@
     arch_packages:
       - borg
       - cifs-utils
-      - firefox
       - fzf
       - httpie
       - i3-wm
@@ -53,6 +54,7 @@
       - python-pip
       - python-pylint
       - python-virtualenv
+      - ranger
       - remmina
       - util-linux
       - vim-runtime
@@ -66,17 +68,15 @@
 - name: Arch-specific (AUR)
   command: "yay -S {{ item }} --noconfirm --needed"
   register: result
-  with_items:
+  loop:
     - chromedriver
     - google-chrome
     - jre6
     - jre7
-    - mattermost-desktop-bin
-    - minishift-bin
     - nocache
     - rundeck-cli
     - tmuxinator
     - vmtouch
   when: ansible_distribution == 'Archlinux'
-  changed_when: result.stdout != ""
+  changed_when: not result.stdout
   become: no
