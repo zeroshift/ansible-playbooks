@@ -19,6 +19,7 @@
     recursive: yes
     update: yes
   loop:
+    - ale
     - syntastic
     - tabular
     - vim-flake8

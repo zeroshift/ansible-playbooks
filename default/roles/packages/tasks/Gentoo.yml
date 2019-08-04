@@ -14,6 +14,7 @@
       - dev-python/pip
       - dev-python/pylint
       - dev-python/virtualenv
+      - dev-vcs/hub
       - media-fonts/liberation-fonts
       - media-fonts/noto
       - media-fonts/source-pro

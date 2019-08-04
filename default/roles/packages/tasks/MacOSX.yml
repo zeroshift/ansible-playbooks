@@ -43,8 +43,8 @@
       - google-chrome
       - iina
       - iterm2
-      - mattermost
       - oracle-jdk
+      - slack
       - streamlink-twitch-gui
       - vagrant
       - virtualbox
@@ -64,6 +64,7 @@
       - hub
       - httpie
       - ipython
+      - kubectl
       - mutt
       - nmap
       - ssh-copy-id

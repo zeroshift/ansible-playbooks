@@ -1,7 +1,14 @@
 " Set color
 "colorscheme solarized
 
-"Syntastic
+"ALE
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+"Syntastic disable
+let g:syntastic_mode_map = { 'mode': 'passive' }
+
+"Colors
 colorscheme nxzbz
 "if &diff
 "    colorscheme delek
