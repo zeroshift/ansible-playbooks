@@ -12,6 +12,7 @@
       manager: auto
     check_mode: no
     tags: misc
+    when: ansible_distribution != 'MacOSX'
 
   - name: MISC | Sync misc Linux configs
     copy:
@@ -34,7 +35,9 @@
       dest: "~/.config/{{ item.name }}/{{ item.config }}"
     loop:
       - { name: 'i3status', config: 'config' }
-    when: item.name in ansible_facts.packages
+    when:
+      - ansible_distribution != 'MacOSX'
+      - item.name in ansible_facts.packages
     become: no
     tags:
       - misc
