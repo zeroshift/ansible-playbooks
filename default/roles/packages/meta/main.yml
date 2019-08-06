@@ -7,15 +7,21 @@ galaxy_info:
   min_ansible_version: 2.7
 
   platforms:
+    - name: Archlinux
+      versions:
+        - all
     - name: CentOS
       versions:
         - 7
-    - name: Ubuntu
+    - name: Debian
       versions:
-        - 18.04
+        - 10
     - name: Gentoo
       versions:
         - all
+    - name: Ubuntu
+      versions:
+        - 18.04
 
   galaxy_tags: []
 dependencies: []
