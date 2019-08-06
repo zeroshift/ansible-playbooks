@@ -2,6 +2,10 @@
 
 - hosts: workstations:personal_servers
   roles:
+    - role: housekeeping
+      tags:
+        - never
+        - housekeeping
     - role: packages
       tags: pkgs
 

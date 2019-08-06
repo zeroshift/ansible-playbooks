@@ -7,13 +7,6 @@
   become: no
   ignore_errors: true
 
-- name: OSX | Upgrade pip
-  pip:
-    name: pip
-    extra_args: "--upgrade"
-  become: no
-  ignore_errors: true
-
 - name: OSX | Install virtualenv
   pip:
     name: virtualenv

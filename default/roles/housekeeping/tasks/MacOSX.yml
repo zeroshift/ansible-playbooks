@@ -1,0 +1,18 @@
+---
+
+# TODO: Do I really want/need to manage the system pip?
+- name: OSX | Upgrade pip
+  pip:
+    name: pip
+    extra_args: "--upgrade"
+  become: no
+  ignore_errors: true
+
+- name: Update/upgrade homebrew
+  homebrew:
+    update_homebrew: yes
+    upgrade_all: yes
+
+- name: Update/upgrade homebrew casks
+  homebrew_cask:
+    upgrade_all: yes

@@ -1,0 +1,7 @@
+---
+
+- include_tasks: "{{ ansible_distribution }}.yml"
+  when: ansible_distribution == "MacOSX" or ansible_distribution == "Archlinux" or ansible_distribution == "Gentoo"
+
+- include_tasks: "{{ ansible_os_family }}.yml"
+  when: ansible_os_family == "Debian"
