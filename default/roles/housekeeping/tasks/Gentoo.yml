@@ -1,1 +1,18 @@
 ---
+
+- name: Gentoo | Sync and upgrade
+  portage:
+    package: '@world'
+    update: yes
+    deep: yes
+    sync: yes
+    # quiet: yes
+    # loadavg:
+    # jobs: 
+    # changed_use:
+  become: yes
+
+- name: Gentoo | Depclean
+  portage:
+    depclean: yes
+  become: yes
