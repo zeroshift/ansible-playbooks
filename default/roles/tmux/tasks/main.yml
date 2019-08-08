@@ -1,7 +1,7 @@
 ---
 
 - name: Register tmux version
-  shell: >
+  shell: |
     set -o pipefail
     tmux -V | awk '{ print $NF }'
   args:
