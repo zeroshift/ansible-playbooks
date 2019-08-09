@@ -35,6 +35,7 @@
     deb_packages:
       - chromium-chromedriver
       - firefox
+      - i3status
       - i3-wm
       - mutt
       - fonts-noto
@@ -42,7 +43,8 @@
       - fonts-noto-cjk
       - freerdp-x11
       - google-chrome-stable
-      # - slack 
+      # - slack
+      - suckless-tools
       - nvidia-settings
       - remmina
       - terminator

@@ -38,7 +38,8 @@
       src: "templates/{{ item.name }}_{{ item.config }}.j2"
       dest: "~/.config/{{ item.name }}/{{ item.config }}"
     loop:
-      - { name: 'i3status', config: 'config' }
+      - name: 'i3status'
+        config: 'config'
     when:
       - ansible_distribution != 'MacOSX'
       - item.name in ansible_facts.packages
