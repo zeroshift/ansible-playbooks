@@ -123,7 +123,8 @@
     #   %p  progress value if set ([  0%] to [100%]) or nothing
     #   %n  progress value if set without any extra characters
     # Markup is allowed
-    format = "<b>%s</b>\n%b"
+    # format = "<b>%s</b>\n%b"
+    format = "<span font="Monospace 12">%s</span>\n<span size="13">%b</span>"
 
     # Alignment of message text.
     # Possible values are "left", "center" and "right".
@@ -159,7 +160,7 @@
     max_icon_size = 32
 
     # Paths to default icons.
-    icon_folders = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/
+    icon_path = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/
 
     ### History ###
 
