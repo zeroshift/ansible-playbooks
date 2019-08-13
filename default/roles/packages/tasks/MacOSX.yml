@@ -7,20 +7,15 @@
   become: no
   ignore_errors: true
 
-- name: OSX | Install virtualenv
-  pip:
-    name: virtualenv
-  become: no
-  ignore_errors: true
-
-- name: OSX | Install molecule
+- name: OSX | Install pip packages
   pip:
     name: "{{ modules }}"
   become: no
   vars:
     modules:
       - 'molecule[docker]'
-      - 'docker'
+      - docker
+      - virtualenv
   ignore_errors: true
 
 - name: OSX | Tap casks
@@ -51,6 +46,7 @@
     state: present
   vars:
     packages:
+      - ansible
       - git
       - grsync
       - htop-osx
@@ -60,6 +56,7 @@
       - kubectl
       - mutt
       - nmap
+      - pre-commit
       - ssh-copy-id
       - testdisk
       - tmux

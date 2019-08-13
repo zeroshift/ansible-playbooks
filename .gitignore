@@ -3,3 +3,4 @@ hosts
 *.pyc
 *.DS_Store
 *__pycache__
+work/
