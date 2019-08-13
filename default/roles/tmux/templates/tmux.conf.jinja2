@@ -1,8 +1,13 @@
 ### NPRENDERGAST ###
 
 # Handle nested stuff better
+{% if tmux_version.stdout|float >= 1.9 %}
+set -g status-style bg=green
+setw -g window-status-current-style bg=green
+{% else %}
 set -g status-bg green 
 setw -g window-status-current-bg green 
+{% endif %}
 
 bind -n M-F11 set -qg status-bg green 
 bind -n M-F12 set -qg status-bg cyan 

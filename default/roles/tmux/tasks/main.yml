@@ -3,7 +3,7 @@
 - name: Register tmux version
   shell: |
     set -o pipefail
-    tmux -V | awk '{ print $NF }'
+    tmux -V | awk '{ print $NF }' | sed 's/[a-z]$//g'
   args:
     executable: /bin/bash
   register: tmux_version
