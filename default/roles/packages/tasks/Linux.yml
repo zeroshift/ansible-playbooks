@@ -17,6 +17,7 @@
       - lsof
       - nmap
       - pigz
+      - rclone
       - rsync
       - strace
       - sudo
