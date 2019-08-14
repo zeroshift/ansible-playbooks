@@ -17,7 +17,6 @@
     version: '26d9ace1b47f4591b2afdf333442a498311b6ace'
     recursive: yes
     update: yes
-  ignore_errors: True
 
 - name: Create tmux.conf
   template:

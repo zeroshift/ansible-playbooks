@@ -7,7 +7,6 @@
     version: 'cf6b802b4bd3fe2b78cf1533884554487afa3763'
     recursive: yes
     update: yes
-  ignore_errors: True
 
 - name: Link rc files
   file:

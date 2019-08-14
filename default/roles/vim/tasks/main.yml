@@ -38,4 +38,3 @@
     - name: vim-puppet
       repo: rodjek
       version: 'b2ae19b3ef397ed7404bf15051cbc5ff655b893e'
-  ignore_errors: True
