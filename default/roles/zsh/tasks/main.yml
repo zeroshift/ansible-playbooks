@@ -4,7 +4,7 @@
   git:
     repo: "https://github.com/zeroshift/prezto.git"
     dest: "~/.zprezto"
-    version: '80ed095d8a33bde2db2e1131607f439ee92e6567'
+    version: '4a09a3d347ca8b45feb25e207a5990434f8aea4e'
     recursive: yes
     update: yes
 
