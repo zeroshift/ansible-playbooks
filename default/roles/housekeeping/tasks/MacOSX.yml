@@ -1,10 +1,14 @@
 ---
 
 # TODO: Do I really want/need to manage the system pip?
-- name: OSX | Upgrade pip
+- name: "OSX | Upgrade {{ pip_packages|regex_replace('\\[|\\]') }}"
   pip:
-    name: pip
+    name: "{{ pip_packages }}"
     extra_args: "--upgrade"
+  vars:
+    pip_packages:
+      - pip
+      - setuptools
   become: no
   ignore_errors: true
 

@@ -37,6 +37,7 @@
       - vagrant
       - virtualbox
       - virtualbox-extension-pack
+      - wireshark
   become: no
   ignore_errors: true
 
@@ -57,6 +58,7 @@
       - mutt
       - nmap
       - pre-commit
+      - socat
       - ssh-copy-id
       - testdisk
       - tmux
