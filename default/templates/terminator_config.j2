@@ -4,6 +4,7 @@
   enabled_plugins = ActivityWatch, TerminalShot
   title_transmit_bg_color = "#c16ae9"
 [keybindings]
+{% if ansible_distribution == 'Ubuntu' %}
   go_down = <Alt>j
   go_left = <Alt>h
   go_next = <Alt>n
@@ -13,6 +14,10 @@
   next_tab = <Super>Tab
   prev_tab = <Shift><Super>Tab
   toggle_zoom = <Alt>z
+{% else %}
+  next_tab = <Super>Tab
+  prev_tab = <Shift><Super>Tab
+{% endif %}
 [layouts]
   [[default]]
     [[[child0]]]
@@ -32,13 +37,21 @@
 [profiles]
   [[default]]
     allow_bold = False
+{% if ansible_distribution != 'Gentoo' %}
     background_color = "#002b36"
+{% endif %}
     copy_on_selection = True
     cursor_blink = False
     cursor_color = "#839496"
     cursor_color_fg = False
+{% if ansible_distribution == 'Ubuntu' %}
     font = Ubuntu Mono Bold 14
+{% else %}
+    font = Source Code Pro Semi-Bold 11
+{% endif %}
+{% if ansible_distribution != 'Gentoo' %}
     foreground_color = "#839496"
+{% endif %}
     palette = "#4d6683:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#4d6683:#cb4b16:#79bf56:#fce94f:#606ec1:#c882ff:#3cb4aa:#fdf6e3"
     scrollbar_position = hidden
     use_system_font = False

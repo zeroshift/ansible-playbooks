@@ -74,24 +74,13 @@
     tags:
       - misc
 
-  - name: DOTFILES | Sync terminator Linux configs
-    copy:
-      src: "files/terminator_configs/config"
+  - name: DOTFILES | Template terminator Linux config
+    template:
+      src: "templates/terminator_config.j2"
       dest: "~/.config/terminator/config"
     when:
-      - ansible_distribution != 'Ubuntu'
       - ansible_distribution != 'MacOSX'
       - gui|bool
-    become: no
-    tags:
-      - misc
-
-  - name: DOTFILES | Sync terminator Linux configs (Ubuntu)
-    copy:
-      src: "files/terminator_configs/config.Ubuntu"
-      dest: "~/.config/terminator/config"
-    when:
-      - ansible_distribution == 'Ubuntu'
     become: no
     tags:
       - misc
