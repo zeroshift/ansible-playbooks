@@ -6,6 +6,28 @@
       tags: node_exporter
 
 - hosts: workstations:personal_servers
+  pre_tasks:
+    - name: Stop wireguard client
+      systemd:
+        name: "wg-quick@{{ wg_client_defroute_int }}.service"
+        state: stopped
+      become: yes
+      when: wg_client_defroute_int is defined
+      tags:
+        - never
+        - housekeeping
+
+  post_tasks:
+    - name: Start wireguard client
+      systemd:
+        name: "wg-quick@{{ wg_client_defroute_int }}.service"
+        state: started
+      become: yes
+      when: wg_client_defroute_int is defined
+      tags:
+        - never
+        - housekeeping
+
   roles:
     - role: housekeeping
       tags:

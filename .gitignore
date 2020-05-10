@@ -1,4 +1,5 @@
 hosts
+host_vars
 *.retry
 *.pyc
 *.DS_Store
