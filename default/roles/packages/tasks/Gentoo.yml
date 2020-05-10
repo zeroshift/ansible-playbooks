@@ -9,18 +9,16 @@
     gentoo_packages:
       - app-backup/borgbackup
       - app-editors/vim
-      # - app-emulation/virtualbox-modules
       - app-misc/ranger
       - dev-python/pip
       - dev-python/pylint
       - dev-python/virtualenv
-      - dev-vcs/hub
       - media-fonts/liberation-fonts
       - media-fonts/noto
       - media-fonts/source-pro
       - net-analyzer/wireshark
       - net-fs/nfs-utils
-      - net-im/slack-bin
+      - net-im/slack
       - net-misc/openssh
       - sys-fs/ncdu
       - sys-process/parallel
