@@ -35,7 +35,6 @@
   become: yes
   vars:
     gui_packages:
-      - compton
       - dunst
       - feh
       - firefox
@@ -49,6 +48,5 @@
       - vlc
   when:
     - ansible_distribution != 'MacOSX'
-    - ansible_distribution != 'Debian'
     - gui|bool
   ignore_errors: true
