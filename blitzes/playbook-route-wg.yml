@@ -1,0 +1,89 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    phys_int: wlan0
+    tun_int: wg0
+  tasks:
+    - name: "Set ip_forward sysctl"
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: 1
+        state: present
+        sysctl_file: /etc/sysctl.conf
+
+    - name: "iptables: Enable NAT"
+      iptables:
+        table: nat
+        chain: POSTROUTING
+        action: append
+        out_interface: "{{ tun_int }}"
+        jump: MASQUERADE
+
+    - name: "iptables: Enable allow {{ phys_int }} -> {{ tun_int }}"
+      iptables:
+        chain: FORWARD
+        action: append
+        in_interface: "{{ phys_int }}"
+        out_interface: "{{ tun_int }}"
+        jump: ACCEPT
+
+    - name: "iptables: Enable allow {{ tun_int }} -> {{ phys_int }}"
+      iptables:
+        chain: FORWARD
+        action: append
+        in_interface: "{{ tun_int }}"
+        out_interface: "{{ phys_int }}"
+        match: state
+        ctstate: ESTABLISHED,RELATED
+        jump: ACCEPT
+
+    - name: "iptables: Allow lo"
+      iptables:
+        chain: INPUT
+        action: append
+        in_interface: lo
+        jump: ACCEPT
+
+    - name: "iptables: Allow ICMP"
+      iptables:
+        chain: INPUT
+        action: append
+        in_interface: "{{ phys_int }}"
+        protocol: icmp
+        jump: ACCEPT
+
+    - name: "iptables: Allow SSH"
+      iptables:
+        chain: INPUT
+        action: append
+        in_interface: "{{ phys_int }}"
+        protocol: tcp
+        destination_port: 22
+        jump: ACCEPT
+
+    - name: "iptables: Allow initiated traffic to return"
+      iptables:
+        chain: INPUT
+        action: append
+        match: state
+        ctstate: ESTABLISHED,RELATED
+        jump: ACCEPT
+
+    - name: "iptables: Drop everything else"
+      iptables:
+        chain: "{{ item }}"
+        policy: DROP
+      loop:
+        - FORWARD
+        - INPUT
+
+    - name: "Install iptables-persistent"
+      package:
+        name: iptables-persistent
+        state: present
+
+    - name: "Enable netfilter-persistent"
+      service:
+        name: netfilter-persistent
+        enabled: yes
