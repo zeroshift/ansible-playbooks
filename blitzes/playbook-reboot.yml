@@ -1,0 +1,13 @@
+---
+- hosts: all
+  serial:
+    - 1
+  max_fail_percentage: '0%'
+  tasks:
+    - name: Pause for confirm
+      pause:
+        prompt: "Confirm reboot of {{ inventory_hostname }}"
+
+    - name: "Reboot {{ inventory_hostname }}"
+      reboot:
+      become: yes
