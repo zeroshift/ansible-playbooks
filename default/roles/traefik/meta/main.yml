@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: Nick Prendergast
+  description: Start traefik docker container
+  company: N/A
+  license: BSD
+  min_ansible_version: 2.7
+
+  platforms:
+    - name: CentOS
+      versions:
+        - 7
+    - name: Ubuntu
+      versions:
+        - 18.04
+    - name: Gentoo
+      versions:
+        - all
+
+  galaxy_tags: []
+dependencies: []
