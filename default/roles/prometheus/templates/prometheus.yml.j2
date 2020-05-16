@@ -1,0 +1,20 @@
+---
+global:
+  scrape_interval:     15s
+  evaluation_interval: 30s
+
+scrape_configs:
+- job_name: prometheus
+  honor_labels: true
+  static_configs:
+  - targets:
+      - 'localhost:9090'
+{% for scrape_config in prometheus_scrape_configs %}
+{% for job, targets in scrape_config.items()  %}
+
+# test
+- job_name: {{ job }}
+  static_configs:
+  - targets: {{ targets }}
+{% endfor %}
+{% endfor %}

@@ -1,0 +1,43 @@
+---
+- name: Make prometheus config dir
+  file:
+    path: "{{ prometheus_conf_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: 2755
+  become: yes
+
+- name: Deploy template config
+  template:
+    src: "templates/prometheus.yml.j2"
+    dest: "{{ prometheus_conf_dir }}/prometheus.yml"
+    owner: "{{ ansible_user }}"
+    mode: 0644
+  become: yes
+  notify: Reload prometheus
+
+- name: Start prometheus
+  docker_container:
+    name: prometheus
+    state: started
+    restart_policy: "unless-stopped"
+    keep_volumes: yes
+    network_mode: host
+    image: "prom/prometheus{{ prometheus_arch }}:v{{ prometheus_version }}"
+    command: >-
+      --config.file=/etc/prometheus/prometheus.yml
+      --web.enable-lifecycle
+    ports:
+      - "9090:9090"
+    volumes:
+      - "{{ prometheus_conf_dir }}:/etc/prometheus"
+      - "{{ prometheus_data_volume }}:/prometheus"
+
+- name: Wait for prometheus to become ready
+  uri:
+    url: "http://localhost:{{ prometheus_port }}/-/ready"
+    method: GET
+  register: _result
+  until: _result.status == 200
+  retries: 30
+  delay: 2

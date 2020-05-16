@@ -1,0 +1,6 @@
+---
+
+- name: Reload prometheus
+  uri:
+    url: "http://localhost:{{ prometheus_port }}/-/reload"
+    method: POST
