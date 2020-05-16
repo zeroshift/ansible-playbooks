@@ -1,0 +1,23 @@
+---
+- name: Start grafana
+  docker_container:
+    name: grafana
+    state: started
+    restart_policy: "unless-stopped"
+    keep_volumes: yes
+    # network_mode: host
+    image: "grafana/grafana:{{ grafana_version }}"
+    ports:
+      - "{{ grafana_port }}:3000"
+    volumes:
+      - "{{ grafana_data_volume }}:/var/lib/grafana"
+    labels: "{{ grafana_labels }}"
+
+# - name: Wait for prometheus to become ready
+#   uri:
+#     url: "http://localhost:{{ prometheus_port }}/-/ready"
+#     method: GET
+#   register: _result
+#   until: _result.status == 200
+#   retries: 30
+#   delay: 2
