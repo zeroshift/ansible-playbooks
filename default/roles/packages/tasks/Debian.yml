@@ -17,6 +17,8 @@
       - openssh-server
       - nfs-common
       - parallel
+      - pre-commit
+      - python-docker
       - python-pip
       - pylint
       - python-virtualenv
