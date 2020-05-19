@@ -17,7 +17,7 @@
       - openssh-server
       - nfs-common
       - parallel
-      - pre-commit
+
       - python-docker
       - python-pip
       - pylint
@@ -58,6 +58,16 @@
       - xclip
       - x11-xserver-utils
   when: gui|bool
+
+- name: Debian-specific
+  apt:
+    name: "{{ deb_packages }}"
+    state: present
+  become: yes
+  vars:
+    deb_packages:
+      - pre-commit
+  when: ansible_distribution == "Debian"
 
 - name: Ubuntu-specific
   apt:
