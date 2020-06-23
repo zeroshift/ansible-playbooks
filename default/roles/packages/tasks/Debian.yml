@@ -43,8 +43,6 @@
       - fonts-noto
       - fonts-noto-color-emoji
       - fonts-noto-cjk
-      - freerdp-x11
-      - google-chrome-stable
       # - slack
       - suckless-tools
       - nvidia-settings

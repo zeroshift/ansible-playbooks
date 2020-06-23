@@ -51,7 +51,6 @@
     loop:
       - dunst
       - i3
-      # - terminator
     when:
       - ansible_distribution != 'MacOSX'
       - gui|bool

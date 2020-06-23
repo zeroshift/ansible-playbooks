@@ -26,7 +26,6 @@
       - wget
       - zsh
   when: ansible_distribution != 'MacOSX'
-  ignore_errors: true
 
 - name: Linux default (GUI)
   package:
@@ -49,4 +48,3 @@
   when:
     - ansible_distribution != 'MacOSX'
     - gui|bool
-  ignore_errors: true
