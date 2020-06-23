@@ -11,7 +11,7 @@
       - git
       - hardlink
       - htop
-      - ipython
+      - ipython3
       - jq
       - lbzip2
       - lsof

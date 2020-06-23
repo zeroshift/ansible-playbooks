@@ -17,11 +17,10 @@
       - openssh-server
       - nfs-common
       - parallel
-
-      - python-docker
-      - python-pip
+      - python3-docker
+      - python3-pip
       - pylint
-      - python-virtualenv
+      - python3-virtualenv
       - ranger
       - tmuxinator
       - util-linux
@@ -75,4 +74,17 @@
   vars:
     ubu_packages:
       - vmtouch
+      - gnome-tweak-tool
+  when: ansible_distribution == "Ubuntu"
+
+- name: Ubuntu-specific Snaps
+  snap:
+    name: "{{ ubu_snaps }}"
+    state: present
+    classic: yes
+  become: yes
+  vars:
+    ubu_snaps:
+      - slack
+      - discord
   when: ansible_distribution == "Ubuntu"
