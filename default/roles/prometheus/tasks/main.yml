@@ -23,10 +23,11 @@
     restart_policy: "unless-stopped"
     keep_volumes: yes
     network_mode: host
-    image: "prom/prometheus{{ prometheus_arch }}:v{{ prometheus_version }}"
+    image: "prom/prometheus{{ prometheus_arch }}:{{ prometheus_version }}"
     command: >-
       --config.file=/etc/prometheus/prometheus.yml
       --web.enable-lifecycle
+      --storage.tsdb.retention.time={{ prometheus_retention_time }}
     ports:
       - "9090:9090"
     volumes:
@@ -41,3 +42,4 @@
   until: _result.status == 200
   retries: 30
   delay: 2
+  when: not ansible_check_mode

@@ -1,9 +1,10 @@
 ---
 prometheus_arch: ""
-prometheus_version: "2.18.1"
+prometheus_version: "latest"
 prometheus_data_volume: "prom_data"
 prometheus_port: 9090
 prometheus_conf_dir: "/home/{{ ansible_user }}/.config/prometheus/"
+prometheus_retention_time: "30d"
 prometheus_scrape_configs:
   - node:
      - "localhost:9100"
