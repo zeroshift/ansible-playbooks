@@ -143,18 +143,24 @@
   gather_facts: no
   roles:
     - role: prometheus
-      tags: prometheus
+      tags:
+        - docker
+        - prometheus
 
 - hosts: grafana
   become: no
   gather_facts: no
   roles:
     - role: grafana
-      tags: grafana
+      tags:
+        - docker
+        - grafana
 
 - hosts: traefik
   become: no
   gather_facts: no
   roles:
     - role: traefik
-      tags: traefik
+      tags:
+        - docker
+        - traefik
