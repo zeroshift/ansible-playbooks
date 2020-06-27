@@ -1,18 +1,18 @@
 ---
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.1.0
     hooks:
-    -   id: end-of-file-fixer
-    -   id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
 
-- repo: https://github.com/adrienverge/yamllint.git
-  sha: v1.23.0
-  hooks:
-    - id: yamllint
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.23.0
+    hooks:
+      - id: yamllint
 
-- repo: https://github.com/ansible/ansible-lint.git
-  sha: v4.2.0
-  hooks:
-    - id: ansible-lint
-      files: \.(yaml|yml)$
+  - repo: https://github.com/ansible/ansible-lint.git
+    rev: v4.2.0
+    hooks:
+      - id: ansible-lint
+        files: \.(yaml|yml)$

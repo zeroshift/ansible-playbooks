@@ -5,12 +5,12 @@
 set -g status-style bg=green
 setw -g window-status-current-style bg=green
 {% else %}
-set -g status-bg green 
-setw -g window-status-current-bg green 
+set -g status-bg green
+setw -g window-status-current-bg green
 {% endif %}
 
-bind -n M-F11 set -qg status-bg green 
-bind -n M-F12 set -qg status-bg cyan 
+bind -n M-F11 set -qg status-bg green
+bind -n M-F12 set -qg status-bg cyan
 bind -n S-down \
 	send-keys M-F12 \; \
 	set -qg status-bg green \; \
@@ -36,7 +36,7 @@ set-window-option -g window-status-current-bg yellow
 # Pane controls
 bind-key m set-window-option synchronize-panes
 #bind-key n set-window-option synchronize-panes off
-bind-key v join-pane -s !
+# bind-key v join-pane -s !
 bind-key b break-pane -t ':'
 bind-key @ command-prompt -p "create pane from:"  "join-pane -s ':%%'"
 
@@ -89,7 +89,8 @@ setw -g mode-keys vi
 # copy/paste using vim-style keys
 bind Escape copy-mode
 unbind p
-bind p paste-buffer
+unbind V
+bind V paste-buffer
 
 # Copy Settings
 {% if tmux_version.stdout|float < 2.5 %}
