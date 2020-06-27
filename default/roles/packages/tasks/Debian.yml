@@ -9,6 +9,7 @@
     deb_packages:
       - borgbackup
       - cifs-utils
+      - docker.io
       # - fzf
       - httpie
       - nfs-common

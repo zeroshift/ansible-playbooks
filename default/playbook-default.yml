@@ -1,10 +1,11 @@
 ---
-- hosts: personal_servers
+- hosts: personal_workstations
+  become: no
   roles:
-    - role: cloudalchemy.node-exporter
-      tags: node_exporter
+    - role: nvidia_gpu_exporter
+      tags: nvidia_gpu_exporter
 
-- hosts: workstations:personal_servers
+- hosts: personal_workstations:personal_servers
   pre_tasks:
     - name: Stop wireguard client
       systemd:
@@ -34,9 +35,10 @@
         - housekeeping
     - role: packages
       tags: pkgs
+    - role: cloudalchemy.node-exporter
+      tags: node_exporter
 
   tasks:
-
   - name: Get installed packages
     package_facts:
       manager: auto
