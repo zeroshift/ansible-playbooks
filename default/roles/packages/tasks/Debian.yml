@@ -88,4 +88,6 @@
     ubu_snaps:
       - slack
       - discord
-  when: ansible_distribution == "Ubuntu"
+  when:
+    - ansible_distribution == "Ubuntu"
+    - gui|bool
