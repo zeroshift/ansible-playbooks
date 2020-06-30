@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include base_directories"
+      include_role:
+        name: "base_directories"

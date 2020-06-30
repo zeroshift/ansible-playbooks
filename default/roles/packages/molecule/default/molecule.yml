@@ -3,10 +3,6 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
-  options:
-    config-file: ../../../.yamllint
 platforms:
   - name: centos7
     image: geerlingguy/docker-centos7-ansible:latest
@@ -19,14 +15,5 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
-    options:
-      x: ["ANSIBLE0004"]
-scenario:
-  name: default
 verifier:
-  name: testinfra
-  enabled: false
-  lint:
-    name: flake8
+  name: ansible
