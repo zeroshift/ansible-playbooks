@@ -1,10 +1,4 @@
 ---
-- hosts: personal_workstations
-  become: no
-  roles:
-    - role: nvidia_gpu_exporter
-      tags: nvidia_gpu_exporter
-
 - hosts: personal_workstations:personal_servers
   pre_tasks:
     - name: Stop wireguard client
