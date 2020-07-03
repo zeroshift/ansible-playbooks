@@ -1,0 +1,20 @@
+---
+pihole_version: "latest"
+pihole_ports:
+  - "53:53/tcp"
+  - "53:53/udp"
+  - "67:67/udp"
+  - "80:80/tcp"
+  - "443:443/tcp"
+pihole_dns_opts:
+  - '127.0.0.1'
+  - '1.1.1.1'
+pihole_env:
+  # CONDITIONAL_FORWARDING: "True"
+  # CONDITIONAL_FORWARDING_IP: "192.168.0.1"
+  # CONDITIONAL_FORWARDING_DOMAIN: "lan"
+  # WEBPASSWORD: "changeme"
+  # VIRTUAL_HOST: "your_pihole_hostname"
+  DNS1: "1.1.1.1"
+  DNS2: "1.0.0.1"
+  TZ: "America/Chicago"

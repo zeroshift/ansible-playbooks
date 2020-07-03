@@ -160,3 +160,12 @@
       tags:
         - docker
         - traefik
+
+- hosts: pihole
+  become: no
+  gather_facts: no
+  roles:
+    - role: pihole
+      tags:
+        - docker
+        - pihole

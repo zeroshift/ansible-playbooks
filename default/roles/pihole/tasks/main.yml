@@ -1,0 +1,14 @@
+---
+- name: "Start Pi-hole"
+  docker_container:
+    name: pihole 
+    state: started
+    restart_policy: "unless-stopped"
+    keep_volumes: yes
+    image: "pihole/pihole:{{ pihole_version }}"
+    ports: "{{ pihole_ports }}"
+    dns_opts: "{{ pihole_dns_opts }}"
+    env: "{{ pihole_env }}"
+    volumes:
+      - "pihole-etc-storage:/etc/pihole/"
+      - "pihole-dnsmasq-storage:/etc/dnsmasq.d/"
