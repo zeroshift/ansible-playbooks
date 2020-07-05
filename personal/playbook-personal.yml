@@ -1,0 +1,63 @@
+---
+- hosts: personal_servers
+  become: yes
+  gather_facts: yes
+  roles:
+    - role: packages
+      tags: pkgs
+
+- name: Import default playbook
+  import_playbook: ../default/playbook-default.yml
+
+- hosts: personal_workstations
+  become: no
+  tasks:
+    - name: Ensure options in streamlink config
+      blockinfile:
+        path: ~/.config/streamlink/config
+        create: yes
+        block: |
+          # Player options
+          player=mpv
+          player-no-close
+
+- hosts: personal_workstations:personal_servers
+  roles:
+    - role: cloudalchemy.node-exporter
+      tags: node_exporter
+
+- hosts: prometheus
+  become: no
+  gather_facts: no
+  roles:
+    - role: prometheus
+      tags:
+        - docker
+        - prometheus
+
+- hosts: grafana
+  become: no
+  gather_facts: no
+  roles:
+    - role: grafana
+      tags:
+        - docker
+        - grafana
+
+- hosts: traefik
+  become: no
+  gather_facts: no
+  roles:
+    - role: traefik
+      tags:
+        - docker
+        - traefik
+
+- hosts: pihole
+  become: no
+  gather_facts: no
+  roles:
+    - role: pihole
+      tags:
+        - docker
+        - pihole

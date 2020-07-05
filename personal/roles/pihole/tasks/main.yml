@@ -1,7 +1,7 @@
 ---
 - name: "Start Pi-hole"
   docker_container:
-    name: pihole 
+    name: pihole
     state: started
     restart_policy: "unless-stopped"
     keep_volumes: yes

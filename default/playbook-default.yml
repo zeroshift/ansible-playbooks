@@ -1,36 +1,8 @@
 ---
-- hosts: personal_workstations:personal_servers
-  pre_tasks:
-    - name: Stop wireguard client
-      systemd:
-        name: "wg-quick@{{ wg_client_defroute_int }}.service"
-        state: stopped
-      become: yes
-      when: wg_client_defroute_int is defined
-      tags:
-        - never
-        - housekeeping
-
-  post_tasks:
-    - name: Start wireguard client
-      systemd:
-        name: "wg-quick@{{ wg_client_defroute_int }}.service"
-        state: started
-      become: yes
-      when: wg_client_defroute_int is defined
-      tags:
-        - never
-        - housekeeping
-
+- hosts: workstations
   roles:
-    - role: housekeeping
-      tags:
-        - never
-        - housekeeping
     - role: packages
       tags: pkgs
-    - role: cloudalchemy.node-exporter
-      tags: node_exporter
 
   tasks:
   - name: Get installed packages
@@ -62,9 +34,7 @@
     loop:
       - dunst
       - i3
-    when:
-      - ansible_distribution != 'MacOSX'
-      - gui|bool
+    when: ansible_distribution != 'MacOSX'
     become: no
     tags:
       - misc
@@ -87,22 +57,10 @@
     template:
       src: "templates/terminator_config.j2"
       dest: "~/.config/terminator/config"
-    when:
-      - ansible_distribution != 'MacOSX'
-      - gui|bool
+    when: ansible_distribution != 'MacOSX'
     become: no
     tags:
       - misc
-
-  - name: MISC | Ensure options in streamlink config
-    blockinfile:
-      path: ~/.config/streamlink/config
-      create: yes
-      block: |
-        # Player options
-        player=mpv
-        player-no-close
-    when: gui|bool
 
 - hosts: all
   connection: ssh
@@ -124,7 +82,6 @@
   gather_facts: no
 
   tasks:
-
   - name: BASH | Copy bashrc
     copy:
       src: "files/bash_configs/bashrc"
@@ -133,39 +90,3 @@
       backup: yes
     tags:
       - misc
-
-- hosts: prometheus
-  become: no
-  gather_facts: no
-  roles:
-    - role: prometheus
-      tags:
-        - docker
-        - prometheus
-
-- hosts: grafana
-  become: no
-  gather_facts: no
-  roles:
-    - role: grafana
-      tags:
-        - docker
-        - grafana
-
-- hosts: traefik
-  become: no
-  gather_facts: no
-  roles:
-    - role: traefik
-      tags:
-        - docker
-        - traefik
-
-- hosts: pihole
-  become: no
-  gather_facts: no
-  roles:
-    - role: pihole
-      tags:
-        - docker
-        - pihole

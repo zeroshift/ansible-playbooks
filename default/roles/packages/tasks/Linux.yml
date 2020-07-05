@@ -23,6 +23,7 @@
       - sudo
       - tcpdump
       - tmux
+      - tree
       - wget
       - zsh
   when: ansible_distribution != 'MacOSX'
