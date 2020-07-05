@@ -1,0 +1,36 @@
+---
+- hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Install libpam-google-authenticator
+      apt:
+        name: libpam-google-authenticator
+        state: present
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Add Google Auth PAM module
+      lineinfile:
+        path: /etc/pam.d/sshd
+        line: "auth required pam_google_authenticator.so"
+        create: yes
+      notify: restart sshd
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Set ChallengeResponseAuthentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^ChallengeResponseAuthentication"
+        line: "ChallengeResponseAuthentication yes"
+      notify: restart sshd
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Pause for setup
+      pause:
+        prompt: "Please run 'google-authenticator' before continuing."
+      when: ansible_distribution == "Ubuntu"
+
+  handlers:
+    - name: restart sshd
+      systemd:
+        name: sshd
+        state: restarted
