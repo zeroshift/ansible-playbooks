@@ -1,0 +1,64 @@
+---
+- hosts: workstations:personal_servers
+  gather_facts: yes
+  become: yes
+  pre_tasks:
+    - name: Stop wireguard client
+      systemd:
+        name: "wg-quick@{{ wg_client_defroute_int }}.service"
+        state: stopped
+      when: wg_client_defroute_int is defined
+
+  tasks:
+    - name: MacOS | Update/upgrade homebrew
+      homebrew:
+        update_homebrew: yes
+        upgrade_all: yes
+      when: ansible_distribution == "MacOSX"
+
+    - name: MacOS | Update/upgrade homebrew casks
+      homebrew_cask:
+        upgrade_all: yes
+      when: ansible_distribution == "MacOSX"
+
+    - name: Debian/Ubuntu | Apt upgrade
+      apt:
+        upgrade: yes
+        state: latest
+        update_cache: yes
+        cache_valid_time: 3600
+        autoclean: yes
+        autoremove: yes
+      become: no
+      when: ansible_os_family == "Debian"
+
+    - name: Gentoo | Sync and upgrade portage
+      portage:
+        package: 'sys-apps/portage'
+        sync: yes
+        oneshot: yes
+      when: ansible_distribution == "Gentoo"
+
+    - name: Gentoo | Upgrade all packages
+      portage:
+        package: '@world'
+        update: yes
+        deep: yes
+        newuse: yes
+        keepgoing: yes
+        jobs: 8
+        loadavg: 16
+        quietbuild: yes
+      when: ansible_distribution == "Gentoo"
+
+    - name: Gentoo | Depclean
+      portage:
+        depclean: yes
+      when: ansible_distribution == "Gentoo"
+
+  post_tasks:
+    - name: Start wireguard client
+      systemd:
+        name: "wg-quick@{{ wg_client_defroute_int }}.service"
+        state: started
+      when: wg_client_defroute_int is defined
