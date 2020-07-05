@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: personal_workstations:personal_servers
   serial:
     - 1
   max_fail_percentage: '0%'
