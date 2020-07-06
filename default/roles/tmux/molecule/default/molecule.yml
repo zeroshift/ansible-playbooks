@@ -14,11 +14,9 @@ platforms:
   - name: ubuntu
     image: geerlingguy/docker-ubuntu1804-ansible:latest
     pre_build_image: true
-  # Can't test on Gentoo with no systemd,
-  # and cant change locale in the container without it
-  # - name: debian
-  #   image: geerlingguy/docker-debian9-ansible:latest
-  #   pre_build_image: true
+  - name: debian
+    image: geerlingguy/docker-debian9-ansible:latest
+    pre_build_image: true
 provisioner:
   name: ansible
   lint:

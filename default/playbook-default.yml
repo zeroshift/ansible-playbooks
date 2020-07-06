@@ -5,62 +5,62 @@
       tags: pkgs
 
   tasks:
-  - name: Get installed packages
-    package_facts:
-      manager: auto
-    check_mode: no
-    tags: misc
-    when: ansible_distribution != 'MacOSX'
+    - name: Get installed packages
+      package_facts:
+        manager: auto
+      check_mode: no
+      tags: misc
+      when: ansible_distribution != 'MacOSX'
 
-  - name: MISC | Create config dirs
-    file:
-      dest: "~/.config/{{ item }}"
-      state: directory
-      mode: 0755
-    loop:
-      - i3status
-      - terminator
-    when:
-      - ansible_distribution != 'MacOSX'
-      - item in ansible_facts.packages
-    become: no
-    tags:
-      - misc
+    - name: MISC | Create config dirs
+      file:
+        dest: "~/.config/{{ item }}"
+        state: directory
+        mode: 0755
+      loop:
+        - i3status
+        - terminator
+      when:
+        - ansible_distribution != 'MacOSX'
+        - item in ansible_facts.packages
+      become: no
+      tags:
+        - misc
 
-  - name: MISC | Sync misc Linux configs
-    copy:
-      src: "files/{{ item }}_configs/"
-      dest: "~/.config/{{ item }}/"
-    loop:
-      - dunst
-      - i3
-    when: ansible_distribution != 'MacOSX'
-    become: no
-    tags:
-      - misc
+    - name: MISC | Sync misc Linux configs
+      copy:
+        src: "files/{{ item }}_configs/"
+        dest: "~/.config/{{ item }}/"
+      loop:
+        - dunst
+        - i3
+      when: ansible_distribution != 'MacOSX'
+      become: no
+      tags:
+        - misc
 
-  - name: MISC | Sync misc Linux configs (templates)
-    template:
-      src: "templates/{{ item.name }}_{{ item.config }}.j2"
-      dest: "~/.config/{{ item.name }}/{{ item.config }}"
-    loop:
-      - name: 'i3status'
-        config: 'config'
-    when:
-      - ansible_distribution != 'MacOSX'
-      - item.name in ansible_facts.packages
-    become: no
-    tags:
-      - misc
+    - name: MISC | Sync misc Linux configs (templates)
+      template:
+        src: "templates/{{ item.name }}_{{ item.config }}.j2"
+        dest: "~/.config/{{ item.name }}/{{ item.config }}"
+      loop:
+        - name: 'i3status'
+          config: 'config'
+      when:
+        - ansible_distribution != 'MacOSX'
+        - item.name in ansible_facts.packages
+      become: no
+      tags:
+        - misc
 
-  - name: DOTFILES | Template terminator Linux config
-    template:
-      src: "templates/terminator_config.j2"
-      dest: "~/.config/terminator/config"
-    when: ansible_distribution != 'MacOSX'
-    become: no
-    tags:
-      - misc
+    - name: DOTFILES | Template terminator Linux config
+      template:
+        src: "templates/terminator_config.j2"
+        dest: "~/.config/terminator/config"
+      when: ansible_distribution != 'MacOSX'
+      become: no
+      tags:
+        - misc
 
 - hosts: all
   connection: ssh
@@ -68,13 +68,15 @@
 
   roles:
     - role: base_directories
-      tags: [ 'git', 'venv' ]
+      tags:
+        - git
+        - venv
     - role: tmux
-      tags: [ 'tmux' ]
+      tags: tmux
     - role: vim
-      tags: [ 'vim' ]
+      tags: vim
     - role: zsh
-      tags: [ 'zsh' ]
+      tags: zsh
 
 - hosts: servers
   connection: ssh
@@ -82,11 +84,11 @@
   gather_facts: no
 
   tasks:
-  - name: BASH | Copy bashrc
-    copy:
-      src: "files/bash_configs/bashrc"
-      dest: "~/.bashrc"
-      mode: 0600
-      backup: yes
-    tags:
-      - misc
+    - name: BASH | Copy bashrc
+      copy:
+        src: "files/bash_configs/bashrc"
+        dest: "~/.bashrc"
+        mode: 0600
+        backup: yes
+      tags:
+        - misc

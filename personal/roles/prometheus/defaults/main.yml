@@ -7,4 +7,4 @@ prometheus_conf_dir: "/home/{{ ansible_user }}/.config/prometheus/"
 prometheus_retention_time: "30d"
 prometheus_scrape_configs:
   - node:
-     - "localhost:9100"
+      - "localhost:9100"
