@@ -29,7 +29,6 @@
         cache_valid_time: 3600
         autoclean: yes
         autoremove: yes
-      become: no
       when: ansible_os_family == "Debian"
 
     - name: Gentoo | Sync and upgrade portage
