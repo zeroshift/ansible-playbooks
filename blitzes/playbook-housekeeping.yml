@@ -14,11 +14,13 @@
       homebrew:
         update_homebrew: yes
         upgrade_all: yes
+      become: no
       when: ansible_distribution == "MacOSX"
 
     - name: MacOS | Update/upgrade homebrew casks
       homebrew_cask:
         upgrade_all: yes
+      become: no
       when: ansible_distribution == "MacOSX"
 
     - name: Debian/Ubuntu | Apt upgrade
