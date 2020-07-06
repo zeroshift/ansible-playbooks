@@ -7,3 +7,4 @@ group_vars
 *__pycache__
 work/
 .devcontainer
+.vscode
