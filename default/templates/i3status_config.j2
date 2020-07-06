@@ -13,7 +13,7 @@ general {
 
 #order += "ipv6"
 order += "disk /"
-{% if wifi %}
+{% if wifi | default(false) %}
 order += "wireless _first_"
 {% else %}
 order += "ethernet _first_"

@@ -48,4 +48,4 @@
       - vlc
   when:
     - ansible_distribution != 'MacOSX'
-    - gui|bool
+    - "'workstations' in group_names"

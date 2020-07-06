@@ -1,4 +1,13 @@
 ---
+- hosts: personal_workstations:personal_servers
+  become: yes
+  tasks:
+    - name: Stop wireguard client
+      systemd:
+        name: "wg-quick@{{ wg_client_defroute_int }}.service"
+        state: stopped
+      when: wg_client_defroute_int is defined
+
 - hosts: personal_servers
   become: yes
   gather_facts: yes
@@ -61,3 +70,12 @@
       tags:
         - docker
         - pihole
+
+- hosts: personal_workstations:personal_servers
+  become: yes
+  tasks:
+    - name: Start wireguard client
+      systemd:
+        name: "wg-quick@{{ wg_client_defroute_int }}.service"
+        state: started
+      when: wg_client_defroute_int is defined

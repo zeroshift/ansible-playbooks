@@ -27,7 +27,6 @@
       - util-linux
       - vim-runtime
 
-
 - name: Debian/Ubuntu-specific (GUI)
   apt:
     name: "{{ deb_packages }}"
@@ -55,17 +54,7 @@
       - wireshark-qt
       - xclip
       - x11-xserver-utils
-  when: gui|bool
-
-- name: Debian-specific
-  apt:
-    name: "{{ deb_packages }}"
-    state: present
-  become: yes
-  vars:
-    deb_packages:
-      - pre-commit
-  when: ansible_distribution == "Debian"
+  when: "'workstations' in group_names"
 
 - name: Ubuntu-specific
   apt:
@@ -90,4 +79,4 @@
       - discord
   when:
     - ansible_distribution == "Ubuntu"
-    - gui|bool
+    - "'workstations' in group_names"
