@@ -1,6 +1,7 @@
 ---
 prometheus_arch: ""
 prometheus_version: "latest"
+prometheus_pull: false
 prometheus_data_volume: "prom_data"
 prometheus_port: 9090
 prometheus_conf_dir: "/home/{{ ansible_user }}/.config/prometheus/"

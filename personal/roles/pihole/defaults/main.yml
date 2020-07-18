@@ -1,5 +1,6 @@
 ---
 pihole_version: "latest"
+pihole_pull: false
 pihole_ports:
   - "53:53/tcp"
   - "53:53/udp"

@@ -3,6 +3,7 @@
   docker_container:
     name: pihole
     state: started
+    pull: "{{ pihole_pull }}"
     restart_policy: "unless-stopped"
     keep_volumes: yes
     image: "pihole/pihole:{{ pihole_version }}"

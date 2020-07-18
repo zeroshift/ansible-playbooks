@@ -1,5 +1,6 @@
 ---
 grafana_version: "latest"
+grafana_pull: false
 grafana_port: "3000"
 grafana_data_volume: "grafana-storage"
 grafana_labels:

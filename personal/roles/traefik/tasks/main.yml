@@ -3,6 +3,7 @@
   docker_container:
     name: traefik
     state: started
+    pull: "{{ traefik_pull }}"
     restart_policy: "unless-stopped"
     image: "traefik:v{{ traefik_version }}"
     command: >-
@@ -15,12 +16,3 @@
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-
-# - name: Wait for prometheus to become ready
-#   uri:
-#     url: "http://localhost:{{ prometheus_port }}/-/ready"
-#     method: GET
-#   register: _result
-#   until: _result.status == 200
-#   retries: 30
-#   delay: 2

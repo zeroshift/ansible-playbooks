@@ -20,6 +20,7 @@
   docker_container:
     name: prometheus
     state: started
+    pull: "{{ prometheus_pull }}"
     restart_policy: "unless-stopped"
     keep_volumes: yes
     network_mode: host

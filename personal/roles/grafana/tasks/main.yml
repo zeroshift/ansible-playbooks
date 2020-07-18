@@ -3,6 +3,7 @@
   docker_container:
     name: grafana
     state: started
+    pull: "{{ grafana_pull }}"
     restart_policy: "unless-stopped"
     keep_volumes: yes
     # network_mode: host
