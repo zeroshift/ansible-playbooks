@@ -65,6 +65,7 @@
     ubu_packages:
       - vmtouch
       - gnome-tweak-tool
+      - docker.io
   when: ansible_distribution == "Ubuntu"
 
 - name: Ubuntu-specific Snaps
