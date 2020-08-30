@@ -1,12 +1,15 @@
 ---
 - hosts: personal_workstations:personal_servers
-  become: yes
-  tasks:
+  pre_tasks:
     - name: Stop wireguard client
       systemd:
         name: "wg-quick@{{ wg_client_defroute_int }}.service"
         state: stopped
       when: wg_client_defroute_int is defined
+      become: yes
+  roles:
+    - role: htop
+      tags: htop
 
 - hosts: personal_servers
   become: yes

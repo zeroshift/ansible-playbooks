@@ -1,0 +1,17 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Include default vars
+      include_vars: ../../defaults/main.yml
+
+    - name: Check htop binary is installed
+      stat:
+        path: "{{ htop_install_dir }}/htop"
+      register: htop_installed
+
+    - name: Ensure the binary exists
+      assert:
+        that: htop_installed.stat.exists

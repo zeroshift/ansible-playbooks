@@ -1,0 +1,11 @@
+---
+
+- name: Look for existing htop install
+  stat:
+    path: "{{ htop_install_dir }}/htop"
+  register: htop_installed
+
+- name: Include htop tasks
+  include_tasks: htop.yml
+  when:
+    - not htop_installed.stat.exists

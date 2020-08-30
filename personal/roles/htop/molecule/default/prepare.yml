@@ -1,0 +1,6 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: Create ~/.local/bin
+      command: mkdir -p ~/.local/bin
