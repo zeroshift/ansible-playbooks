@@ -77,7 +77,7 @@
   vars:
     ubu_snaps:
       - slack
-      - discord
+      - vscode
   when:
     - ansible_distribution == "Ubuntu"
     - "'workstations' in group_names"
