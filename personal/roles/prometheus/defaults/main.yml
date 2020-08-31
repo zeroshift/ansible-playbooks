@@ -9,3 +9,4 @@ prometheus_retention_time: "30d"
 prometheus_scrape_configs:
   - node:
       - "localhost:9100"
+prometheus_federate_configs: []
