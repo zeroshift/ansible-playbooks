@@ -10,8 +10,8 @@
       - borgbackup
       - cifs-utils
       - docker.io
-      # - fzf
       - httpie
+      - ipython3
       - nfs-common
       - nocache
       - openssh-client

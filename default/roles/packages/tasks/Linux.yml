@@ -8,10 +8,10 @@
   vars:
     packages:
       - chrony
+      - docker-compose
       - git
       - hardlink
       - htop
-      - ipython3
       - jq
       - lbzip2
       - lsof
