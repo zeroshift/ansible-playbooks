@@ -8,3 +8,18 @@
 
 - include_tasks: "{{ ansible_os_family }}.yml"
   when: ansible_os_family == "Debian"
+
+- name: "Install additional pkgs for {{ ansible_distribution }}"
+  package:
+    name: "{{ additional_packages[ansible_distribution] }}"
+    state: present
+  become: yes
+  when: "ansible_distribution in additional_packages.keys()"
+
+- name: "Install additional snaps for {{ ansible_distribution }}"
+  snap:
+    name: "{{ additional_snaps[ansible_distribution] }}"
+    state: present
+    classic: yes
+  become: yes
+  when: "ansible_distribution in additional_snaps.keys()"
