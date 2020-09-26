@@ -1,0 +1,5 @@
+---
+- name: Include tasks for promtail
+  include_tasks:
+    file: promtail.yml
+  when: ansible_architecture in ['armv7l', 'x86_64']

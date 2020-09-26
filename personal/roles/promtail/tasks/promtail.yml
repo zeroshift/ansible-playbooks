@@ -1,0 +1,77 @@
+---
+- name: Create dest dir
+  become: false
+  file:
+    path: "/tmp/promtail-linux-{{ promtail_version}}-{{ promtail_arch }}"
+    state: directory
+  delegate_to: localhost
+
+- name: Download promtail binary to local folder
+  become: false
+  get_url:
+    url: "https://github.com/grafana/loki/releases/download/v{{ promtail_version }}/promtail-linux-{{ promtail_arch }}.zip"
+    dest: "/tmp/promtail-linux-{{ promtail_version}}-{{ promtail_arch}}/promtail-linux-{{ promtail_arch }}.zip"
+    checksum: "sha256:{{ promtail_checksum[promtail_version][promtail_arch] }}"
+  register: _download_binary
+  until: _download_binary is succeeded
+  retries: 5
+  delay: 2
+  delegate_to: localhost
+  when: not ansible_check_mode
+
+- name: Unpack promtail binary
+  become: false
+  unarchive:
+    src: "/tmp/promtail-linux-{{ promtail_version}}-{{ promtail_arch}}/promtail-linux-{{ promtail_arch }}.zip"
+    dest: "/tmp/promtail-linux-{{ promtail_version}}-{{ promtail_arch}}"
+    creates: "/tmp/promtail-linux-{{ promtail_version}}-{{ promtail_arch}}/promtail-linux-{{ promtail_arch }}"
+  delegate_to: localhost
+  when: not ansible_check_mode
+
+- name: Propagate promtail binaries
+  become: true
+  copy:
+    src: "/tmp/promtail-linux-{{ promtail_version}}-{{ promtail_arch}}/promtail-linux-{{ promtail_arch }}"
+    dest: "{{ promtail_binary_install_dir }}/promtail"
+    mode: 0755
+    owner: root
+    group: root
+  notify: Restart promtail
+  when: not ansible_check_mode
+
+- name: Create /etc/promtail
+  become: true
+  file:
+    path: /etc/promtail
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Deploy promtail config
+  become: true
+  template:
+    src: config.yml.j2
+    dest: /etc/promtail/config.yml
+    mode: 0644
+    owner: root
+    group: root
+  notify: Restart promtail
+
+- name: Install promtail.service
+  become: true
+  template:
+    src: promtail.service.j2
+    dest: /etc/systemd/system/promtail.service
+    mode: 0644
+    owner: root
+    group: root
+  notify: Restart promtail
+
+- name: Start promtail
+  become: true
+  systemd:
+    name: promtail.service
+    state: started
+    enabled: true
+    daemon_reload: true

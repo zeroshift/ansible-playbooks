@@ -1,0 +1,33 @@
+---
+- name: Make loki config dir
+  file:
+    path: "{{ loki_conf_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: 02755
+  become: yes
+
+- name: Deploy template config
+  template:
+    src: "templates/config.yml.j2"
+    dest: "{{ loki_conf_dir }}/config.yml"
+    owner: "{{ ansible_user }}"
+    mode: 0644
+  become: yes
+  notify: Reload loki
+
+- name: Start grafana loki
+  docker_container:
+    name: loki
+    state: started
+    pull: "{{ loki_pull }}"
+    restart_policy: "unless-stopped"
+    keep_volumes: no
+    # network_mode: host
+    image: "grafana/loki:{{ loki_version }}"
+    command: -config.file=/etc/loki/config.yml
+    ports:
+      - "{{ loki_port }}:3100"
+    volumes:
+      - "{{ loki_data_volume }}:/loki"
+      - "{{ loki_conf_dir }}/config.yml:/etc/loki/config.yml"

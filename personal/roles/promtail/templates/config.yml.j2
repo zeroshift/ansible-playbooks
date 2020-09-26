@@ -1,0 +1,23 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://{{ loki_server }}:{{ loki_port }}/loki/api/v1/push
+
+scrape_configs:
+- job_name: system
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: varlogs
+      instance: {{ ansible_hostname }}
+      __path__: /var/log/*log
+
+  pipeline_stages:
+    - drop:
+        expression: ".*homekit-enviroplus.*"

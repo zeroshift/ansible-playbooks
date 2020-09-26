@@ -1,0 +1,12 @@
+---
+
+logcli_version: "1.6.1"
+logcli_arch_map:
+  x86_64: amd64
+  armv7l: arm
+logcli_arch: "{{ logcli_arch_map[ansible_architecture] }}"
+logcli_checksum:
+  1.6.1:
+    amd64: "506f74a12ca0799d95a242b3cff887c7421d9325da665a44f0d31036868e0250"
+    arm: "27aec714fb28a38f6958e92c98c6250cddfb693e24fb775246c0ee60934ae5a4"
+logcli_binary_install_dir: "~/.local/bin/"

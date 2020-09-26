@@ -1,0 +1,12 @@
+---
+
+promtail_version: "1.6.1"
+promtail_arch_map:
+  x86_64: amd64
+  armv7l: arm
+promtail_arch: "{{ promtail_arch_map[ansible_architecture] }}"
+promtail_checksum:
+  1.6.1:
+    amd64: "685b1e2f601b4b748e8cd6b1a5209daa710f12f5fdbeee81a1424efc6a9741c7"
+    arm: "16fb7e5d85d6bb43505e8e49a6ecce51fcec1b44e20e1193f344b0a90228279c"
+promtail_binary_install_dir: /usr/local/bin/

@@ -8,6 +8,14 @@
         name: "wg-quick@{{ wg_client_defroute_int }}.service"
         state: stopped
       when: wg_client_defroute_int is defined
+      become: yes
+  roles:
+    - role: htop
+      tags: htop
+    - role: docker
+      tags:
+        - docker
+        - docker_config
 
 - hosts: personal_servers
   become: yes
@@ -28,6 +36,9 @@
 - hosts: personal_workstations
   become: no
   gather_facts: no
+  roles:
+    - role: logcli
+      tags: logcli
   tasks:
     - name: Ensure options in streamlink config
       blockinfile:
@@ -43,6 +54,8 @@
   roles:
     - role: cloudalchemy.node-exporter
       tags: node_exporter
+    - role: promtail
+      tags: promtail
 
 - hosts: prometheus
   become: no
@@ -61,6 +74,15 @@
       tags:
         - docker
         - grafana
+
+- hosts: loki
+  become: no
+  gather_facts: no
+  roles:
+    - role: loki
+      tags:
+        - docker
+        - loki
 
 - hosts: traefik
   become: no
