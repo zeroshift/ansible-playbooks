@@ -1,0 +1,54 @@
+---
+- name: Make temp gopath
+  file:
+    path: "{{ homekit_enviroplus_gopath }}"
+    state: directory
+  delegate_to: localhost
+
+- name: Clone homekit_enviroplus repo
+  git:
+    repo: "{{ homekit_enviroplus_repo_url }}"
+    dest: "{{ homekit_enviroplus_repo_dest }}"
+    version: "{{ homekit_enviroplus_repo_version }}"
+  register: homekit_enviroplus_clone_result
+  delegate_to: localhost
+
+- name: Install go deps
+  environment:
+    GOPATH: "{{ homekit_enviroplus_gopath }}"
+    GOBIN: "{{ homekit_enviroplus_gobin }}"
+  command: "go get"
+  args:
+    chdir: "{{ homekit_enviroplus_repo_dest }}"
+  delegate_to: localhost
+  when: homekit_enviroplus_clone_result.changed
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Cross-compile for ARMv7
+  command: "env GOOS=linux GOARCH=arm GOARM=7 go build homekit-enviroplus.go"
+  args:
+    chdir: "{{ homekit_enviroplus_repo_dest }}"
+  delegate_to: localhost
+  when: homekit_enviroplus_clone_result.changed
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Install binary
+  become: yes
+  copy:
+    src: "{{ homekit_enviroplus_repo_dest }}/homekit-enviroplus"
+    dest: "{{ homekit_enviroplus_bin_install_dir }}/"
+    owner: "{{ homekit_enviroplus_user }}"
+    group: "{{ homekit_enviroplus_user }}"
+    mode: 0755
+  ignore_errors: "{{ ansible_check_mode }}"
+  notify: Restart homekit_enviroplus
+
+- name: Install homekit_enviroplus.service
+  become: true
+  template:
+    src: homekit_enviroplus.service.j2
+    dest: /etc/systemd/system/homekit_enviroplus.service
+    mode: 0644
+    owner: root
+    group: root
+  notify: Restart homekit_enviroplus

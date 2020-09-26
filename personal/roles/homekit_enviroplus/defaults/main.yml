@@ -1,0 +1,9 @@
+---
+homekit_enviroplus_repo_url: "https://github.com/zeroshift/homekit-enviroplus.git"
+homekit_enviroplus_repo_version: "c6d2085de6d3e6defacb3948d071534fd2e4b49b"
+homekit_enviroplus_repo_dest: "/tmp/go/enviroplus_exporter"
+homekit_enviroplus_bin_install_dir: "/usr/local/bin"
+homekit_enviroplus_user: "{{ ansible_user }}"
+homekit_enviroplus_gopath: "/tmp/go"
+homekit_enviroplus_gobin: "/tmp/go/bin"
+homekit_enviroplus_sleep_duration: "1s"

@@ -1,0 +1,28 @@
+---
+
+- name: Install exporter
+  become: true
+  copy:
+    src: "{{ enviroplus_exporter_repo_dest }}"
+    dest: "{{ enviroplus_exporter_install_dir }}/"
+    remote_src: true
+    owner: "{{ enviroplus_exporter_user }}"
+    group: "{{ enviroplus_exporter_user }}"
+    directory_mode: 0755
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Restart enviroplus_exporter
+  become: true
+  systemd:
+    name: enviroplus_exporter.service
+    state: restarted
+    enabled: true
+    daemon_reload: true
+
+- name: Restart enviroplus_lcd
+  become: true
+  systemd:
+    name: enviroplus_lcd.service
+    state: restarted
+    enabled: true
+    daemon_reload: true

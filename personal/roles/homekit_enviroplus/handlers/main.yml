@@ -1,0 +1,9 @@
+---
+
+- name: Restart homekit_enviroplus
+  become: true
+  systemd:
+    name: homekit_enviroplus.service
+    state: restarted
+    enabled: true
+    daemon_reload: true

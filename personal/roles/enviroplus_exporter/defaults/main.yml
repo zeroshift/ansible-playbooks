@@ -1,0 +1,16 @@
+---
+# enviroplus_exporter_repo_url: "https://github.com/tijmenvandenbrink/enviroplus_exporter.git"
+enviroplus_exporter_repo_url: "https://github.com/zeroshift/enviroplus_exporter.git"
+enviroplus_exporter_repo_version: "4cc4755c05b4061df23dafbfa7b4abb808334ddf"
+enviroplus_exporter_repo_dest: "/home/{{ ansible_user }}/git/enviroplus_exporter"
+enviroplus_exporter_install_dir: "/usr/src/"
+enviroplus_exporter_bind_addr: "0.0.0.0"
+enviroplus_exporter_port: "8000"
+enviroplus_exporter_user: "{{ ansible_user }}"
+enviroplus_exporter_packages:
+  - python3-numpy
+  - python3-smbus
+  - python3-pil
+  - python3-setuptools
+  - python3-rpi.gpio
+enviroplus_exporter_temp_comp_factor: "2.25"

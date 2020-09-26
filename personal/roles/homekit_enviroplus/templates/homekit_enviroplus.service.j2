@@ -1,0 +1,13 @@
+[Unit]
+Description=Homekit-enviroplus service
+After=network.target
+
+[Service]
+User={{ homekit_enviroplus_user }}
+Group={{ homekit_enviroplus_user }}
+WorkingDirectory=/tmp/
+ExecStart={{ homekit_enviroplus_bin_install_dir}}/homekit-enviroplus --host=http://{{ enviroplus_exporter_host }} --port={{ enviroplus_exporter_port }} --sleep={{ homekit_enviroplus_sleep_duration }} >> /dev/null
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

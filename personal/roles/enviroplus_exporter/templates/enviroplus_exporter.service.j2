@@ -1,0 +1,13 @@
+[Unit]
+Description=Enviroplus-exporter service
+After=network.target
+
+[Service]
+User={{ enviroplus_exporter_user }}
+Group={{ enviroplus_exporter_user }}
+WorkingDirectory={{ enviroplus_exporter_install_dir }}
+ExecStart=python3 {{ enviroplus_exporter_install_dir }}/enviroplus_exporter/enviroplus_exporter.py --bind={{ enviroplus_exporter_bind_addr }} --port={{ enviroplus_exporter_port }} --factor={{ enviroplus_exporter_temp_comp_factor }}
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Nick Prendergast
+  description: Install homekit_enviroplus
+  company: N/A
+  license: BSD
+  min_ansible_version: 2.7
+
+  platforms:
+    - name: CentOS
+      versions:
+        - 7
+    - name: Ubuntu
+      versions:
+        - 18.04
+
+  galaxy_tags: []
+dependencies: []

@@ -89,6 +89,15 @@
       tags:
         - enviroplus
 
+- hosts: enviroplus_exporter
+  become: no
+  gather_facts: no
+  roles:
+    - role: enviroplus_exporter
+      tags:
+        - enviroplus
+        - enviroplus_exporter
+
 - hosts: personal_workstations:personal_servers
   become: yes
   gather_facts: no

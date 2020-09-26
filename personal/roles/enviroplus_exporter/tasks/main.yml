@@ -1,0 +1,82 @@
+---
+
+- name: Install package dependencies
+  become: true
+  apt:
+    name: "{{ enviroplus_exporter_packages }}"
+    state: present
+
+- name: Get i2c_enabled
+  become: true
+  command: "raspi-config nonint get_i2c"
+  register: i2c_enabled
+  changed_when: false
+  check_mode: false
+
+- name: Get spi_enabled
+  become: true
+  command: "raspi-config nonint get_spi"
+  register: spi_enabled
+  changed_when: false
+  check_mode: false
+
+- name: Enable i2c
+  become: true
+  command: "raspi-config nonint do_i2c 0"
+  when: i2c_enabled.stdout != "0"
+
+- name: Enable spi
+  become: true
+  command: "raspi-config nonint do_spi 0"
+  when: spi_enabled.stdout != "0"
+
+- name: Checkout enviroplus_exporter repo
+  git:
+    repo: "{{ enviroplus_exporter_repo_url }}"
+    dest: "{{ enviroplus_exporter_repo_dest }}"
+    version: "{{ enviroplus_exporter_repo_version }}"
+  notify:
+    - Install exporter
+    - Restart enviroplus_exporter
+
+- name: Install enviroplus python library
+  pip:
+    name: enviroplus
+    executable: pip3
+    extra_args: --user
+
+- name: Install enviroplus_exporter dependencies
+  pip:
+    requirements: "{{ enviroplus_exporter_repo_dest }}/requirements.txt"
+    executable: pip3
+    extra_args: --user
+
+- name: Install enviroplus_exporter.service
+  become: true
+  template:
+    src: enviroplus_exporter.service.j2
+    dest: /etc/systemd/system/enviroplus_exporter.service
+    mode: 0644
+    owner: root
+    group: root
+  notify: Restart enviroplus_exporter
+
+- name: Install lcd script
+  become: true
+  template:
+    src: "all-in-one-enviro-mini.py.j2"
+    dest: "{{ enviroplus_exporter_install_dir }}/all-in-one-enviro-mini.py"
+    owner: "{{ enviroplus_exporter_user }}"
+    group: "{{ enviroplus_exporter_user }}"
+    mode: 0755
+  notify: Restart enviroplus_lcd
+
+- name: Install enviroplus_lcd.service
+  become: true
+  template:
+    src: enviroplus_lcd.service.j2
+    dest: /etc/systemd/system/enviroplus_lcd.service
+    mode: 0644
+    owner: root
+    group: root
+  notify: Restart enviroplus_lcd

@@ -1,0 +1,12 @@
+[Unit]
+Description=Enviroplus-lcd service
+After=network.target
+
+[Service]
+User={{ enviroplus_exporter_user }}
+Group={{ enviroplus_exporter_user }}
+ExecStart=python3 {{ enviroplus_exporter_install_dir }}/all-in-one-enviro-mini.py
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
