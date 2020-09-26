@@ -3,10 +3,13 @@
   serial:
     - 1
   max_fail_percentage: '0%'
+  vars:
+    confirm: true
   tasks:
     - name: Pause for confirm
       pause:
         prompt: "Confirm reboot of {{ inventory_hostname }}"
+      when: confirm|bool
 
     - name: "Reboot {{ inventory_hostname }}"
       reboot:
