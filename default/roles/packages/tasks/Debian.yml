@@ -25,7 +25,7 @@
       - ranger
       - tmuxinator
       - util-linux
-      - vim-runtime
+      - vim
 
 - name: Debian/Ubuntu-specific (GUI)
   apt:
