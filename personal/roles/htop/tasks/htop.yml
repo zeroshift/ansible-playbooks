@@ -14,15 +14,16 @@
     creates: "/tmp/htop-{{ htop_version }}"
 
 - name: Update apt sources
+  become: true
   apt:
     update_cache: yes
   when: ansible_os_family == 'Debian'
 
 - name: Install build dependencies
+  become: true
   package:
     name: "{{ htop_deps[ansible_os_family] }}"
     state: present
-  become: yes
   vars:
     htop_deps:
       Debian:
@@ -36,7 +37,7 @@
         - make
         - ncurses-devel
 
-- name: Build and install htop
+- name: Build htop
   shell: >-
     ./autogen.sh &&
     ./configure --disable-unicode &&

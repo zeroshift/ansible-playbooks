@@ -1,16 +1,13 @@
 ---
 - hosts: personal_workstations:personal_servers
   gather_facts: yes
+  become: yes
   pre_tasks:
     - name: Stop wireguard client
       systemd:
         name: "wg-quick@{{ wg_client_defroute_int }}.service"
         state: stopped
       when: wg_client_defroute_int is defined
-      become: yes
-  roles:
-    - role: htop
-      tags: htop
 
 - hosts: personal_servers
   become: yes
@@ -21,6 +18,12 @@
 
 - name: Import default playbook
   import_playbook: ../default/playbook-default.yml
+
+- hosts: personal_workstations:personal_servers
+  gather_facts: no
+  roles:
+    - role: htop
+      tags: htop
 
 - hosts: personal_workstations
   become: no
