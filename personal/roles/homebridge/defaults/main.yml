@@ -1,0 +1,12 @@
+---
+homebridge_version: "latest"
+homebridge_pull: false
+homebridge_port: "8080"
+homebridge_conf_dir: "~/.config/homebridge"
+homebridge_data_volume: "homebridge-storage"
+homebridge_env:
+  TZ: "America/Chicago"
+  PGID: "1000"
+  PUID: "1000"
+  HOMEBRIDGE_CONFIG_UI: "1"
+  HOMEBRIDGE_CONFIG_UI_PORT: "{{ homebridge_port }}"

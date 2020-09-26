@@ -1,5 +1,6 @@
 ---
 - hosts: personal_workstations:personal_servers
+  gather_facts: yes
   pre_tasks:
     - name: Stop wireguard client
       systemd:
@@ -13,7 +14,7 @@
 
 - hosts: personal_servers
   become: yes
-  gather_facts: yes
+  gather_facts: no
   roles:
     - role: packages
       tags: pkgs
@@ -23,6 +24,7 @@
 
 - hosts: personal_workstations
   become: no
+  gather_facts: no
   tasks:
     - name: Ensure options in streamlink config
       blockinfile:
@@ -34,6 +36,7 @@
           player-no-close
 
 - hosts: personal_workstations:personal_servers
+  gather_facts: no
   roles:
     - role: cloudalchemy.node-exporter
       tags: node_exporter
@@ -74,8 +77,21 @@
         - docker
         - pihole
 
+- hosts: homebridge
+  become: no
+  gather_facts: no
+  roles:
+    - role: homebridge
+      tags:
+        - docker
+        - homebridge
+    - role: homekit_enviroplus
+      tags:
+        - enviroplus
+
 - hosts: personal_workstations:personal_servers
   become: yes
+  gather_facts: no
   tasks:
     - name: Start wireguard client
       systemd:

@@ -1,0 +1,14 @@
+---
+- name: Start homebridge
+  become: false
+  docker_container:
+    name: homebridge
+    state: started
+    pull: "{{ homebridge_pull }}"
+    restart_policy: "unless-stopped"
+    keep_volumes: yes
+    network_mode: host
+    image: "oznu/homebridge:{{ homebridge_version }}"
+    env: "{{ homebridge_env }}"
+    volumes:
+      - "{{ homebridge_data_volume }}:/homebridge"
