@@ -4,11 +4,15 @@
   vars:
     phys_int: wlan0
     tun_int: wg0
+    allowed_ports:
+      - "22"
+      - "9090"
+      - "9100"
   tasks:
     - name: "Set ip_forward sysctl"
       sysctl:
         name: net.ipv4.ip_forward
-        value: 1
+        value: "1"
         state: present
         sysctl_file: /etc/sysctl.conf
 
@@ -53,14 +57,15 @@
         protocol: icmp
         jump: ACCEPT
 
-    - name: "iptables: Allow SSH"
+    - name: "iptables: Allow custom ports"
       iptables:
         chain: INPUT
         action: append
         in_interface: "{{ phys_int }}"
         protocol: tcp
-        destination_port: 22
+        destination_port: "{{ item }}"
         jump: ACCEPT
+      loop: "{{ allowed_ports }}"
 
     - name: "iptables: Allow initiated traffic to return"
       iptables:
