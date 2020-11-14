@@ -131,6 +131,15 @@
         state: present
       tags: k3s
 
+    - name: Add additional /etc/hosts entries
+      lineinfile:
+        line: "{{ item }}"
+        path: /etc/hosts
+        state: present
+      loop: "{{ etc_hosts_lines }}"
+      when: etc_hosts_lines is defined
+      tags: k3s
+
 - name: Import k3s playbook
   import_playbook: ../3rd_party/k3s-ansible/site.yml
   tags: k3s
