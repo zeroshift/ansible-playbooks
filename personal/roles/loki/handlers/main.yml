@@ -1,8 +1,0 @@
----
-
-- name: Reload loki
-  docker_container:
-    image: "grafana/loki:{{ loki_version }}"
-    name: loki
-    state: started
-    restart: yes
