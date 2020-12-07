@@ -1,5 +1,6 @@
 [Unit]
 Description=Promtail log scraper
+Requires=network-online.target
 
 [Service]
 ExecStart=/usr/local/bin/promtail -config.file=/etc/promtail/config.yml
