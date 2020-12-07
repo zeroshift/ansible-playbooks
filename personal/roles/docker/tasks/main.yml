@@ -1,5 +1,0 @@
----
-- name: Include tasks for docker logging to loki
-  include_tasks:
-    file: loki_logging.yml
-  when: docker_loki_logging|bool
