@@ -1,0 +1,48 @@
+---
+- name: Deploy grafana repo
+  community.kubernetes.helm_repository:
+    name: grafana
+    repo_url: https://grafana.github.io/helm-charts
+  run_once: true
+  delegate_to: localhost
+
+- name: Deploy Grafana chart
+  community.kubernetes.helm:
+    name: grafana
+    chart_ref: grafana/grafana
+    chart_version: 5.7.3
+    release_namespace: default
+    values:
+      persistence:
+        enabled: true
+      service:
+        type: LoadBalancer
+        port: 3000
+      datasources:
+        datasources.yaml:
+          apiVersion: 1
+          datasources:
+            - name: Prometheus
+              type: prometheus
+              url: "http://{{ prometheus_server|default('prometheus') }}:9090"
+              isDefault: true
+            - name: Loki
+              type: loki
+              url: "http://loki:3100"
+      resources:
+        limits:
+          cpu: "2"
+          memory: "1Gi"
+        requests:
+          cpu: "1"
+          memory: "512Mi"
+      dashboards:
+        default:
+          node-exporter-full:
+            gnetId: 1860
+            revision: 21
+            datasource: Prometheus
+      plugins:
+        - grafana-piechart-panel
+  run_once: true
+  delegate_to: localhost

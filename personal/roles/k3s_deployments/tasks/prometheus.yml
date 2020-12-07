@@ -1,0 +1,124 @@
+---
+- name: Deploy prometheus configMap
+  k8s:
+    state: present
+    definition: "{{ lookup('template', '{{ item }}_configMap.yml.j2') | from_yaml }}"
+    validate:
+      fail_on_error: yes
+  notify: Restart prometheus
+  loop:
+    - prometheus
+    - prometheus_alert_rules
+
+- name: Deploy prometheus pvc
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: prometheus
+        namespace: default
+        labels:
+          app: prometheus-deployment
+      spec:
+        storageClassName: local-path
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+
+- name: Deploy prometheus deployment
+  k8s:
+    state: present
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: prometheus
+        namespace: default
+        labels:
+          app: prometheus
+      spec:
+        replicas: 1
+        strategy:
+          rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 1
+          type: RollingUpdate
+        selector:
+          matchLabels:
+            app: prometheus
+        template:
+          metadata:
+            labels:
+              app: prometheus
+            annotations:
+              prometheus.io/scrape: "true"
+              prometheus.io/port: "9090"
+          spec:
+            containers:
+              - name: prometheus
+                image: prom/prometheus
+                imagePullPolicy: Always
+                terminationMessagePath: /dev/termination-log
+                terminationMessagePolicy: File
+                args:
+                  - '--storage.tsdb.retention=30d'
+                  - '--storage.tsdb.path=/prometheus'
+                  - '--config.file=/etc/prometheus/prometheus.yml'
+                  - '--web.enable-lifecycle'
+                ports:
+                  - name: web
+                    containerPort: 9090
+                    protocol: TCP
+                volumeMounts:
+                  - name: prometheus-config-volume
+                    mountPath: /etc/prometheus
+                  - name: prometheus-alert-rules-config-volume
+                    mountPath: /etc/prometheus/rules
+                  - name: prometheus-storage-volume
+                    mountPath: /prometheus
+                resources:
+                  limits:
+                    cpu: "2"
+                    memory: "3Gi"
+                  requests:
+                    cpu: "1"
+                    memory: "2Gi"
+            restartPolicy: Always
+            volumes:
+              - name: prometheus-config-volume
+                configMap:
+                  defaultMode: 420
+                  name: prometheus-config
+              - name: prometheus-alert-rules-config-volume
+                configMap:
+                  defaultMode: 420
+                  name: prometheus-alert-rules-config
+              - name: prometheus-storage-volume
+                persistentVolumeClaim:
+                  claimName: prometheus
+
+- name: Deploy prometheus service
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: prometheus-service
+        namespace: default
+        annotations:
+          prometheus.io/scrape: 'true'
+          prometheus.io/port: '9090'
+      spec:
+        selector:
+          app: prometheus
+        type: LoadBalancer
+        ports:
+          - port: 9090
+            targetPort: 9090
+            nodePort: 31097
+            protocol: TCP

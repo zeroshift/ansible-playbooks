@@ -1,0 +1,51 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: default
+data:
+  prometheus.yml: |
+    ---
+    global:
+      scrape_interval:     15s
+      evaluation_interval: 30s
+
+    rule_files:
+      - /etc/prometheus/rules/generic.yml
+
+    alerting:
+      alertmanagers:
+        - scheme: http
+          static_configs:
+            - targets: {{ prometheus_alertmanagers }}
+
+    scrape_configs:
+    - job_name: prometheus
+      honor_labels: true
+      static_configs:
+      - targets:
+          - 'localhost:9090'
+    {% for scrape_config in prometheus_scrape_configs %}
+    {% for job, targets in scrape_config.items()  %}
+
+    - job_name: {{ job }}
+      static_configs:
+      - targets: {{ targets }}
+    {% endfor %}
+    {% endfor %}
+    {% for federate_config in prometheus_federate_configs %}
+    {% for job, item in federate_config.items()  %}
+
+    - job_name: {{ job }}
+      honor_labels: true
+      metrics_path: '/federate'
+
+      params:
+        'match[]': {{ item.matchers }}
+
+      static_configs:
+        - targets: {{ item.targets }}
+
+    {% endfor %}
+    {% endfor %}

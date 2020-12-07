@@ -1,0 +1,6 @@
+---
+prometheus_arch: "-linux-armv7"
+prometheus_scrape_configs: []
+prometheus_federate_configs: []
+prometheus_instance_down_matchers:
+  - 'job="node"'

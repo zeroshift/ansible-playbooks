@@ -165,3 +165,12 @@
 - name: Import k3s playbook
   import_playbook: ../3rd_party/k3s-ansible/site.yml
   tags: k3s
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+    - name: k3s_deployments
+      tags:
+        - k3s_deployments
+        - k3s

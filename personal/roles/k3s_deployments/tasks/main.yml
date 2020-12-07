@@ -1,0 +1,16 @@
+---
+- name: Include loki tasks
+  import_tasks:
+    file: loki.yml
+
+- name: Include grafana tasks
+  import_tasks:
+    file: grafana.yml
+
+- name: Include prometheus tasks
+  import_tasks:
+    file: prometheus.yml
+
+- name: Include alertmanager tasks
+  import_tasks:
+    file: alertmanager.yml

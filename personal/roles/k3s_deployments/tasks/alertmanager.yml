@@ -1,0 +1,88 @@
+---
+- name: Deploy alertmanager configMap
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'alertmanager_configMap.yml.j2') | from_yaml }}"
+    validate:
+      fail_on_error: yes
+  notify: Restart alertmanager
+
+- name: Deploy alertmanager deployment
+  k8s:
+    state: present
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: alertmanager
+        namespace: default
+        labels:
+          app: alertmanager
+      spec:
+        replicas: 1
+        strategy:
+          rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 1
+          type: RollingUpdate
+        selector:
+          matchLabels:
+            app: alertmanager
+        template:
+          metadata:
+            labels:
+              app: alertmanager
+            annotations:
+              prometheus.io/scrape: "true"
+              prometheus.io/port: "9093"
+          spec:
+            containers:
+              - name: alertmanager
+                image: prom/alertmanager
+                imagePullPolicy: Always
+                terminationMessagePath: /dev/termination-log
+                terminationMessagePolicy: File
+                args:
+                  - '--config.file=/etc/alertmanager/alertmanager.yml'
+                ports:
+                  - name: web
+                    containerPort: 9093
+                    protocol: TCP
+                volumeMounts:
+                  - name: alertmanager-config-volume
+                    mountPath: /etc/alertmanager
+                resources:
+                  limits:
+                    cpu: "2"
+                    memory: "512Mi"
+                  requests:
+                    cpu: "1"
+                    memory: "128Mi"
+            restartPolicy: Always
+            volumes:
+              - name: alertmanager-config-volume
+                configMap:
+                  defaultMode: 420
+                  name: alertmanager-config
+
+- name: Deploy alertmanager service
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: alertmanager-service
+        namespace: default
+        annotations:
+          prometheus.io/scrape: 'true'
+          prometheus.io/port: '9093'
+      spec:
+        selector:
+          app: alertmanager
+        type: LoadBalancer
+        ports:
+          - port: 9093
+            targetPort: 9093
+            nodePort: 30910
+            protocol: TCP

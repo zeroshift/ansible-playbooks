@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+  namespace: default
+data:
+  alertmanager.yml: |
+    ---
+    route:
+      receiver: pushover
+      group_wait: 30s
+      repeat_interval: 24h
+      group_by:
+        - alertname
+    receivers:
+      - name: pushover
+        pushover_configs:
+          - user_key: "{{ pushover_user_key }}"
+            token: "{{ pushover_token }}"
+            priority: 0
+            send_resolved: true

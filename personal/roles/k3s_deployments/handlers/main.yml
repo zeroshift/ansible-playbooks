@@ -1,0 +1,6 @@
+---
+- name: Restart prometheus
+  command: kubectl rollout restart deployment prometheus
+
+- name: Restart alertmanager
+  command: kubectl rollout restart deployment alertmanager

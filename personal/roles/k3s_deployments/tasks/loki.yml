@@ -1,0 +1,61 @@
+---
+- name: Deploy loki deployment
+  k8s:
+    state: present
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: loki
+        namespace: default
+        labels:
+          app: loki
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: loki
+        template:
+          metadata:
+            labels:
+              app: loki
+          spec:
+            containers:
+              - name: loki
+                imagePullPolicy: IfNotPresent
+                image: grafana/loki:2.0.0
+                terminationMessagePath: "/dev/termination-log"
+                terminationMessagePolicy: File
+                ports:
+                  - containerPort: 3100
+                    protocol: TCP
+                resources:
+                  limits:
+                    cpu: "2"
+                    memory: "1536Mi"
+                  requests:
+                    cpu: "1"
+                    memory: "1Gi"
+  run_once: true
+  delegate_to: localhost
+
+- name: Deploy loki service
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: loki
+        namespace: default
+      spec:
+        selector:
+          app: loki
+        ports:
+          - port: 3100
+            nodePort: 30657
+            protocol: TCP
+            targetPort: 3100
+        type: LoadBalancer
+  run_once: true
+  delegate_to: localhost
