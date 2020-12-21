@@ -23,6 +23,7 @@
         action: append
         out_interface: "{{ tun_int }}"
         jump: MASQUERADE
+      notify: "Reconfigure iptables-persistent"
 
     - name: "iptables: Enable allow {{ phys_int }} -> {{ tun_int }}"
       iptables:
@@ -31,6 +32,7 @@
         in_interface: "{{ phys_int }}"
         out_interface: "{{ tun_int }}"
         jump: ACCEPT
+      notify: "Reconfigure iptables-persistent"
 
     - name: "iptables: Enable allow {{ tun_int }} -> {{ phys_int }}"
       iptables:
@@ -41,6 +43,7 @@
         match: state
         ctstate: ESTABLISHED,RELATED
         jump: ACCEPT
+      notify: "Reconfigure iptables-persistent"
 
     - name: "iptables: Allow lo"
       iptables:
@@ -48,6 +51,7 @@
         action: append
         in_interface: lo
         jump: ACCEPT
+      notify: "Reconfigure iptables-persistent"
 
     - name: "iptables: Allow ICMP"
       iptables:
@@ -56,6 +60,7 @@
         in_interface: "{{ phys_int }}"
         protocol: icmp
         jump: ACCEPT
+      notify: "Reconfigure iptables-persistent"
 
     - name: "iptables: Allow custom ports"
       iptables:
@@ -66,6 +71,7 @@
         destination_port: "{{ item }}"
         jump: ACCEPT
       loop: "{{ allowed_ports }}"
+      notify: "Reconfigure iptables-persistent"
 
     - name: "iptables: Allow initiated traffic to return"
       iptables:
@@ -74,6 +80,7 @@
         match: state
         ctstate: ESTABLISHED,RELATED
         jump: ACCEPT
+      notify: "Reconfigure iptables-persistent"
 
     - name: "iptables: Drop everything else"
       iptables:
@@ -82,6 +89,7 @@
       loop:
         - FORWARD
         - INPUT
+      notify: "Reconfigure iptables-persistent"
 
     - name: "Install iptables-persistent"
       package:
@@ -92,3 +100,7 @@
       service:
         name: netfilter-persistent
         enabled: yes
+
+  handlers:
+    - name: "Reconfigure iptables-persistent"
+      command: "dpkg-reconfigure iptables-persistent"
