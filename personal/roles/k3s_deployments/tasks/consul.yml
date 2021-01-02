@@ -1,0 +1,19 @@
+---
+- name: Deploy hashicorp repo
+  community.kubernetes.helm_repository:
+    name: hashicorp
+    repo_url: https://helm.releases.hashicorp.com
+  run_once: true
+  delegate_to: localhost
+
+- name: Deploy consul chart
+  community.kubernetes.helm:
+    name: consul
+    chart_ref: hashicorp/consul
+    chart_version: 0.20.1
+    release_namespace: default
+    values:
+      global:
+        name: consul
+  run_once: true
+  delegate_to: localhost

@@ -9,13 +9,6 @@
         state: stopped
       when: wg_client_defroute_int is defined
       become: yes
-  roles:
-    - role: htop
-      tags: htop
-    - role: docker
-      tags:
-        - docker
-        - docker_config
 
 - hosts: personal_servers
   become: yes
@@ -74,24 +67,6 @@
       tags:
         - docker
         - grafana
-
-- hosts: loki
-  become: no
-  gather_facts: no
-  roles:
-    - role: loki
-      tags:
-        - docker
-        - loki
-
-- hosts: traefik
-  become: no
-  gather_facts: no
-  roles:
-    - role: traefik
-      tags:
-        - docker
-        - traefik
 
 - hosts: pihole
   become: no
