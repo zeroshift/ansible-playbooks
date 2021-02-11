@@ -22,3 +22,14 @@ data:
               summary: "Instance {{ $labels.instance }} down"
               description: "{{ $labels.instance }} has been down for more than 5 minutes."
               {% endraw %}
+
+          - alert: failed_notifications
+            expr: increase(alertmanager_notifications_failed_total[1h]) > 0
+            for: 0m
+            labels:
+              severity: high
+            annotations:
+              {% raw %}
+              summary: "Failed alerts for {{ $labels.integration }}"
+              description: "Alertmanager was unable to send alerts to {{ $labels.integration }}"
+              {% endraw %}
