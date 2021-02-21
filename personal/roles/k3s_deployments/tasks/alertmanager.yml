@@ -54,10 +54,10 @@
                 resources:
                   limits:
                     cpu: "2"
-                    memory: "512Mi"
+                    memory: "256Mi"
                   requests:
                     cpu: "1"
-                    memory: "128Mi"
+                    memory: "64Mi"
             restartPolicy: Always
             volumes:
               - name: alertmanager-config-volume

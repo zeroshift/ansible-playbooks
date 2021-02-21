@@ -32,17 +32,15 @@
       resources:
         limits:
           cpu: "2"
-          memory: "1Gi"
+          memory: "512Mi"
         requests:
           cpu: "1"
-          memory: "512Mi"
+          memory: "128Mi"
       dashboards:
         default:
           node-exporter-full:
             gnetId: 1860
             revision: 21
             datasource: Prometheus
-      plugins:
-        - grafana-piechart-panel
   run_once: true
   delegate_to: localhost
