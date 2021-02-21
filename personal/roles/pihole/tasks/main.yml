@@ -1,4 +1,25 @@
 ---
+- name: "Pull Pi-hole"
+  docker_image:
+    name: "pihole/pihole:{{ pihole_version }}"
+    source: pull
+
+- name: "Stop/disable systemd-resolved"
+  systemd:
+    name: "systemd-resolved.service"
+    state: stopped
+    enabled: no
+  become: yes
+  when: ansible_distribution == "Ubuntu"
+
+- name: "Setup resolv.conf"
+  copy:
+    dest: /etc/resolv.conf
+    content: |
+      nameserver {{ ansible_default_ipv4.gateway }}
+  become: yes
+  when: ansible_distribution == "Ubuntu"
+
 - name: "Start Pi-hole"
   docker_container:
     name: pihole
@@ -13,3 +34,5 @@
     volumes:
       - "pihole-etc-storage:/etc/pihole/"
       - "pihole-dnsmasq-storage:/etc/dnsmasq.d/"
+    capabilities:
+      - sys_nice
