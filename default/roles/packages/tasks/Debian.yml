@@ -78,7 +78,7 @@
   vars:
     ubu_snaps:
       - slack
-      - vscode
+      # - vscode  # not showing available right now
   when:
     - ansible_distribution == "Ubuntu"
     - "'workstations' in group_names"
