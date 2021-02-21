@@ -1,0 +1,24 @@
+---
+- name: Deploy pihole repo
+  community.kubernetes.helm_repository:
+    name: mojo2600
+    repo_url: https://mojo2600.github.io/pihole-kubernetes/
+  run_once: true
+  delegate_to: localhost
+
+- name: Create pihole namespace
+  k8s:
+    name: pihole
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Deploy pihole chart
+  community.kubernetes.helm:
+    name: pihole
+    chart_ref: mojo2600/pihole
+    chart_version: 1.7.21
+    release_namespace: pihole
+    values: "{{ pihole_helm_values }}"
+  run_once: true
+  delegate_to: localhost
