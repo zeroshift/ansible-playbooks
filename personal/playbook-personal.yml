@@ -155,6 +155,41 @@
   import_playbook: ../3rd_party/k3s-ansible/site.yml
   tags: k3s
 
+- hosts: master
+  gather_facts: no
+  pre_tasks:
+    - name: Copy remote kubeconfig
+      command:
+        cmd: "cp /etc/rancher/k3s/k3s.yaml /etc/rancher/k3s/k3s_with_hostname.yaml"
+        creates: "/etc/rancher/k3s/k3s_with_hostname.yaml"
+      become: yes
+      tags:
+        - k3s_deployments
+        - k3s
+        - kubeconfig
+
+    - name: Replace hostname
+      replace:
+        path: "/etc/rancher/k3s/k3s_with_hostname.yaml"
+        regexp: "127\\.0\\.0\\.1"
+        replace: "{{ groups['master'] | first }}"
+      become: yes
+      tags:
+        - k3s_deployments
+        - k3s
+        - kubeconfig
+
+    - name: Write kubeconfig
+      fetch:
+        src: "/etc/rancher/k3s/k3s_with_hostname.yaml"
+        dest: ~/.kube/config
+        flat: yes
+      become: yes
+      tags:
+        - k3s_deployments
+        - k3s
+        - kubeconfig
+
 - hosts: localhost
   connection: local
   gather_facts: no
