@@ -3,10 +3,11 @@
   include_tasks:
     file: "{{ deployment }}"
   loop:
-    - loki.yml
+    # - loki.yml
     - grafana.yml
     - prometheus.yml
     - alertmanager.yml
-    - consul.yml
+    # - consul.yml
+    - pihole.yml
   loop_control:
     loop_var: "deployment"
