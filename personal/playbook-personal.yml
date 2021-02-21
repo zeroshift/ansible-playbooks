@@ -16,6 +16,22 @@
   roles:
     - role: packages
       tags: pkgs
+  tasks:
+    - name: Add default /etc/hosts entries
+      lineinfile:
+        line: "127.0.0.1 {{ inventory_hostname.split('.') | first }} {{ inventory_hostname }}"
+        path: /etc/hosts
+        state: present
+      tags: etchosts
+
+    - name: Add additional /etc/hosts entries
+      lineinfile:
+        line: "{{ item }}"
+        path: /etc/hosts
+        state: present
+      loop: "{{ etc_hosts_lines }}"
+      when: etc_hosts_lines is defined
+      tags: etchosts
 
 - name: Import default playbook
   import_playbook: ../default/playbook-default.yml
@@ -126,15 +142,6 @@
         fstype: ext4
         opts: defaults,noatime
         state: present
-      tags: k3s
-
-    - name: Add additional /etc/hosts entries
-      lineinfile:
-        line: "{{ item }}"
-        path: /etc/hosts
-        state: present
-      loop: "{{ etc_hosts_lines }}"
-      when: etc_hosts_lines is defined
       tags: k3s
 
 - name: Import k3s playbook
