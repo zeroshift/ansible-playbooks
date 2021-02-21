@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+    - name: Install required packages for ARM systemd-nspawn
+      apt:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - qemu
+          - binfmt-support
+          - qemu-user-static
+          - systemd-container
+
+    - name: Drop arm-chroot file
+      copy:
+        dest: /usr/local/bin/arm-chroot
+        mode: "0755"
+        content: |
+          #!/bin/bash
+          systemd-nspawn -q --bind /usr/bin/qemu-arm-static --pipe -D "$@"
+
+    - name: What do you do with this?
+      debug:
+        msg: "For the host you wish to run against the chroot run with: ansible_host=/path/to/chroot ansible_chroot_exe=arm-chroot ansible_connection=chroot"
