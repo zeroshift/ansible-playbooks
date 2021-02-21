@@ -63,8 +63,8 @@
   roles:
     - role: cloudalchemy.node-exporter
       tags: node_exporter
-    - role: promtail
-      tags: promtail
+# - role: promtail
+#   tags: promtail
 
 - hosts: prometheus
   become: no
