@@ -1,0 +1,23 @@
+---
+- name: Run reset play
+  import_playbook: ../3rd_party/k3s-ansible/reset.yml
+
+- hosts: node
+  gather_facts: no
+  tasks:
+    - name: Drain node and delete data
+      command: "kubectl drain {{ inventory_hostname.split('.') | first }} --force --delete-local-data"
+      delegate_to: localhost
+      ignore_errors: true
+
+    - name: Delete node
+      command: "kubectl delete node {{ inventory_hostname.split('.') | first }}"
+      delegate_to: localhost
+
+    - name: Remove password entries from master node
+      lineinfile:
+        path: /var/lib/rancher/k3s/server/cred/node-passwd
+        regexp: "{{ inventory_hostname.split('.') | first }},$"
+        state: absent
+      become: yes
+      delegate_to: "{{ groups['master'] | first }}"
