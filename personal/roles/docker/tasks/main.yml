@@ -1,0 +1,13 @@
+---
+- name: Setup user for docker
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    state: present
+    append: yes
+
+- name: Docker started/enabled
+  systemd:
+    name: docker.service
+    state: started
+    enabled: yes

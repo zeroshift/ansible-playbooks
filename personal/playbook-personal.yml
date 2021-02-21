@@ -66,6 +66,13 @@
 # - role: promtail
 #   tags: promtail
 
+- hosts: docker
+  become: yes
+  gather_facts: no
+  roles:
+    - role: docker
+      tags: docker
+
 - hosts: prometheus
   become: no
   gather_facts: no
