@@ -1,5 +1,6 @@
 ---
 - hosts: personal_workstations:personal_servers
+  gather_facts: no
   serial:
     - 1
   max_fail_percentage: '0%'
@@ -10,6 +11,12 @@
       pause:
         prompt: "Confirm reboot of {{ inventory_hostname }}"
       when: confirm|bool
+
+    - name: Drain node
+      command: "kubectl drain {{ inventory_hostname.split('.') | first }}"
+      delegate_to: localhost
+      when: "inventory_hostname in groups['k3s_cluster']"
+      ignore_errors: true
 
     - name: "Reboot {{ inventory_hostname }}"
       reboot:
