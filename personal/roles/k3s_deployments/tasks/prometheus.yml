@@ -1,6 +1,6 @@
 ---
 - name: Deploy prometheus configMap
-  k8s:
+  community.kubernetes.k8s:
     state: present
     definition: "{{ lookup('template', '{{ item }}_configMap.yml.j2') | from_yaml }}"
     validate:
@@ -11,7 +11,7 @@
     - prometheus_alert_rules
 
 - name: Deploy prometheus pvc
-  k8s:
+  community.kubernetes.k8s:
     state: present
     definition:
       apiVersion: v1
@@ -30,7 +30,7 @@
             storage: 10Gi
 
 - name: Deploy prometheus deployment
-  k8s:
+  community.kubernetes.k8s:
     state: present
     definition:
       apiVersion: apps/v1
@@ -102,7 +102,7 @@
                   claimName: prometheus
 
 - name: Deploy prometheus service
-  k8s:
+  community.kubernetes.k8s:
     state: present
     definition:
       apiVersion: v1

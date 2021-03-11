@@ -1,4 +1,5 @@
 docker
+kubernetes<12.0.0
 kubernetes-validate
 molecule
 openshift
