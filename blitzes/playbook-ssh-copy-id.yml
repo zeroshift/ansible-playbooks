@@ -1,0 +1,9 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Copy ssh key
+      authorized_key:
+        user: "{{ ansible_user }}"
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
