@@ -7,16 +7,9 @@
   become: yes
   vars:
     deb_packages:
-      - borgbackup
-      - cifs-utils
-      - docker.io
       - httpie
       - ipython3
-      - nfs-common
       - nocache
-      - openssh-client
-      - openssh-server
-      - nfs-common
       - parallel
       - python3-docker
       - python3-kubernetes
@@ -27,6 +20,21 @@
       - tmuxinator
       - util-linux
       - vim
+
+- name: Debian/Ubuntu Server/Workstation-specific
+  apt:
+    name: "{{ deb_packages }}"
+    state: present
+  become: yes
+  vars:
+    deb_packages:
+      - cifs-utils
+      - docker.io
+      - nfs-common
+      - openssh-client
+      - openssh-server
+      - nfs-common
+  when: "'workstations' in group_names or 'servers' in group_names"
 
 - name: Debian/Ubuntu-specific (GUI)
   apt:
@@ -57,17 +65,17 @@
       - x11-xserver-utils
   when: "'workstations' in group_names"
 
-- name: Ubuntu-specific
+- name: Ubuntu Workstation-specific
   apt:
     name: "{{ ubu_packages }}"
     state: present
   become: yes
   vars:
     ubu_packages:
-      - vmtouch
       - gnome-tweak-tool
-      - docker.io
-  when: ansible_distribution == "Ubuntu"
+  when:
+    - ansible_distribution == "Ubuntu"
+    - "'workstations' in group_names"
 
 - name: Ubuntu-specific Snaps
   snap:

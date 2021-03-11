@@ -7,7 +7,6 @@
   become: yes
   vars:
     packages:
-      - chrony
       - docker-compose
       - git
       - hardlink
@@ -21,12 +20,24 @@
       - rsync
       - strace
       - sudo
-      - tcpdump
       - tmux
       - tree
       - wget
       - zsh
   when: ansible_distribution != 'MacOSX'
+
+- name: Linux Workstation/Server-default
+  package:
+    name: "{{ packages }}"
+    state: present
+  become: yes
+  vars:
+    packages:
+      - chrony
+      - tcpdump
+  when:
+    - ansible_distribution != 'MacOSX'
+    - "'workstations' in group_names or 'servers' in group_names"
 
 - name: Linux default (GUI)
   package:

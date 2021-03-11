@@ -1,5 +1,5 @@
 ---
-- hosts: workstations
+- hosts: workstations,personal_servers,wsl
   roles:
     - role: packages
       tags: pkgs
@@ -46,18 +46,11 @@
       loop:
         - name: 'i3status'
           config: 'config'
+        - name: 'terminator'
+          config: 'config'
       when:
         - ansible_distribution != 'MacOSX'
         - item.name in ansible_facts.packages
-      become: no
-      tags:
-        - misc
-
-    - name: DOTFILES | Template terminator Linux config
-      template:
-        src: "templates/terminator_config.j2"
-        dest: "~/.config/terminator/config"
-      when: ansible_distribution != 'MacOSX'
       become: no
       tags:
         - misc

@@ -13,9 +13,6 @@
 - hosts: personal_servers
   become: yes
   gather_facts: no
-  roles:
-    - role: packages
-      tags: pkgs
   tasks:
     - name: Add default /etc/hosts entries
       lineinfile:
@@ -61,7 +58,7 @@
 - hosts: personal_workstations:personal_servers
   gather_facts: no
   roles:
-    - role: cloudalchemy.node-exporter
+    - role: cloudalchemy.node_exporter
       tags: node_exporter
 # - role: promtail
 #   tags: promtail
