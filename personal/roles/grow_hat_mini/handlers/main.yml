@@ -1,0 +1,7 @@
+---
+- name: Restart grow-monitor
+  become: yes
+  systemd:
+    name: grow-monitor.service
+    state: restarted
+    daemon-reload: yes

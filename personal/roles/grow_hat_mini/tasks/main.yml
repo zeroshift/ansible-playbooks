@@ -1,0 +1,123 @@
+---
+
+- name: Install package dependencies
+  become: yes
+  apt:
+    name: "{{ grow_hat_deps }}"
+    state: present
+  vars:
+    grow_hat_deps:
+      - python3-setuptools
+      - python3-pip
+      - python3-yaml
+      - python3-smbus
+      - python3-pil
+      - python3-spidev
+      - python3-rpi.gpio
+      - libatlas-base-dev  # NOT in documentation
+
+- name: Get i2c_enabled
+  become: yes
+  command: "raspi-config nonint get_i2c"
+  register: i2c_enabled
+  changed_when: false
+  check_mode: false
+
+- name: Get spi_enabled
+  become: yes
+  command: "raspi-config nonint get_spi"
+  register: spi_enabled
+  changed_when: false
+  check_mode: false
+
+- name: Enable i2c
+  become: yes
+  command: "raspi-config nonint do_i2c 0"
+  when: i2c_enabled.stdout != "0"
+
+- name: Enable spi
+  become: yes
+  command: "raspi-config nonint do_spi 0"
+  when: spi_enabled.stdout != "0"
+
+- name: Update boot config
+  become: yes
+  lineinfile:
+    line: "dtoverlay=spi0-cs,cs0_pin=14"
+    path: "/boot/config.txt"
+    state: present
+
+- name: Install growhat library
+  become: yes
+  pip:
+    executable: pip3
+    # name: growhat
+    name: "{{ python_libraries }}"
+  vars:
+    python_libraries:
+      - growhat
+      - numpy  # NOT in documentation
+
+- name: Checkout grow-python repo
+  git:
+    repo: "git@github.com:zeroshift/grow-python.git"
+    dest: "~/git/grow-python"
+    version: "master"
+
+- name: Make icons directory
+  become: yes
+  file:
+    path: "/usr/share/grow-monitor"
+    state: directory
+    owner: root
+    group: root
+    mode: 02755
+
+- name: Copy icons
+  become: yes
+  synchronize:
+    src: "/home/{{ ansible_user }}/git/grow-python/examples/icons/"
+    dest: "/usr/share/grow-monitor/icons/"
+  delegate_to: "{{ inventory_hostname }}"
+  notify: Restart grow-monitor
+
+- name: Deploy grow-monitor script
+  become: yes
+  copy:
+    src: "/home/{{ ansible_user }}/git/grow-python/examples/monitor.py"
+    dest: "/usr/bin/grow-monitor"
+    mode: 0755
+    owner: root
+    group: root
+    remote_src: yes
+  notify: Restart grow-monitor
+
+- name: Deploy settings
+  become: yes
+  copy:
+    src: "/home/{{ ansible_user }}/git/grow-python/examples/settings.yml"
+    dest: "/etc/default/grow"
+    mode: 0644
+    owner: root
+    group: root
+    remote_src: yes
+  notify: Restart grow-monitor
+
+- name: Deploy service
+  become: yes
+  copy:
+    src: "/home/{{ ansible_user }}/git/grow-python/service/grow-monitor.service"
+    dest: "/etc/systemd/system/"
+    mode: 0644
+    owner: root
+    group: root
+    remote_src: yes
+  notify: Restart grow-monitor
+
+- name: Start and enable grow-monitor.service
+  become: yes
+  systemd:
+    name: grow-monitor.service
+    state: started
+    enabled: yes
+    daemon-reload: yes
