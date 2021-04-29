@@ -8,7 +8,7 @@ rules:
   comments-indentation: enable
   document-end: disable
   document-start: enable
-  empty-lines: disable
+  empty-lines: enable
   empty-values: disable
   hyphens: enable
   indentation: enable

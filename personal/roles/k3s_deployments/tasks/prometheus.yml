@@ -60,7 +60,7 @@
           spec:
             containers:
               - name: prometheus
-                image: prom/prometheus
+                image: "prom/prometheus:{{ prometheus_version|default('latest') }}"
                 imagePullPolicy: Always
                 terminationMessagePath: /dev/termination-log
                 terminationMessagePolicy: File
