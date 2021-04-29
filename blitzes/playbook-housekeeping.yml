@@ -3,11 +3,22 @@
   gather_facts: yes
   become: yes
   pre_tasks:
+    # Free up bandwidth for updates
     - name: Stop wireguard client
       systemd:
         name: "wg-quick@{{ wg_client_defroute_int }}.service"
         state: stopped
       when: wg_client_defroute_int is defined
+
+    # Free up resources for updates
+    - name: Stop enviroplus services
+      systemd:
+        name: "{{ item }}"
+        state: stopped
+      loop:
+        - enviroplus_exporter.service
+        - enviroplus_lcd.service
+      when: "'enviroplus_exporter' in group_names"
 
   tasks:
     - name: MacOS | Update/upgrade homebrew
@@ -63,3 +74,12 @@
         name: "wg-quick@{{ wg_client_defroute_int }}.service"
         state: started
       when: wg_client_defroute_int is defined
+
+    - name: Start enviroplus services
+      systemd:
+        name: "{{ item }}"
+        state: started
+      loop:
+        - enviroplus_exporter.service
+        - enviroplus_lcd.service
+      when: "'enviroplus_exporter' in group_names"
