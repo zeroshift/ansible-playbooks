@@ -83,3 +83,16 @@
         - enviroplus_exporter.service
         - enviroplus_lcd.service
       when: "'enviroplus_exporter' in group_names"
+
+- hosts: pihole
+  gather_facts: no
+  become: no
+  tags: pihole
+  vars:
+    pi_hole_command: "pihole -up{{ ansible_check_mode | ternary(' --check-only', '') }}"
+  tasks:
+    - name: Update pihole
+      command: "{{ pi_hole_command }}"
+      register: pi_hole_update_result
+      changed_when: "'update available' in pi_hole_update_result.stdout"
+      check_mode: no

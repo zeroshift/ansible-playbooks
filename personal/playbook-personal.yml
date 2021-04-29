@@ -88,14 +88,15 @@
         - docker
         - grafana
 
-- hosts: pihole
+- hosts: pihole_docker
   become: no
   gather_facts: no
   roles:
-    - role: pihole
+    - role: pihole_docker
       tags:
         - docker
         - pihole
+        - pihole_docker
 
 - hosts: homebridge
   become: no
