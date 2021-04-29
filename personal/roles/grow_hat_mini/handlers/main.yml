@@ -5,3 +5,5 @@
     name: grow-monitor.service
     state: restarted
     daemon-reload: yes
+  when: grow_monitor_enabled | default(true) | bool
+

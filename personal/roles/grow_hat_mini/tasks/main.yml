@@ -103,7 +103,7 @@
     remote_src: yes
   notify: Restart grow-monitor
 
-- name: Deploy service
+- name: Deploy grow-monitor service
   become: yes
   copy:
     src: "/home/{{ ansible_user }}/git/grow-python/service/grow-monitor.service"
@@ -118,6 +118,6 @@
   become: yes
   systemd:
     name: grow-monitor.service
-    state: started
-    enabled: yes
+    state: "{{ grow_monitor_enabled | default(true) | ternary('started', 'stopped') }}"
+    enabled: "{{ grow_monitor_enabled | default(true) | ternary('yes', 'no') }}"
     daemon-reload: yes
