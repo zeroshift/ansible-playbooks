@@ -51,12 +51,12 @@
   become: yes
   pip:
     executable: pip3
-    # name: growhat
     name: "{{ python_libraries }}"
   vars:
     python_libraries:
       - growhat
       - numpy  # NOT in documentation
+      - prometheus_client  # NP dependency
 
 - name: Checkout grow-python repo
   git:
@@ -120,4 +120,33 @@
     name: grow-monitor.service
     state: "{{ grow_monitor_enabled | default(true) | ternary('started', 'stopped') }}"
     enabled: "{{ grow_monitor_enabled | default(true) | ternary('yes', 'no') }}"
+    daemon-reload: yes
+- name: Deploy grow_prom script
+  become: yes
+  copy:
+    src: "files/grow_prom.py"
+    dest: "/usr/local/bin/grow_prom.py"
+    mode: 0755
+    owner: root
+    group: root
+    remote_src: no
+  notify: Restart grow_prom
+
+- name: Deploy grow_prom service
+  become: yes
+  template:
+    src: "templates/grow_prom.service.j2"
+    dest: "/etc/systemd/system/grow_prom.service"
+    mode: 0644
+    owner: root
+    group: root
+    remote_src: no
+  notify: Restart grow_prom
+
+- name: Start and enable grow_prom.service
+  become: yes
+  systemd:
+    name: grow_prom.service
+    state: "{{ grow_prom_enabled | default(true) | ternary('started', 'stopped') }}"
+    enabled: "{{ grow_prom_enabled | default(true) | ternary('yes', 'no') }}"
     daemon-reload: yes

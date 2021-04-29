@@ -1,0 +1,9 @@
+[Unit]
+Description=Prometheus exporter for Pimorini Grow Hat Mini
+Requires=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/grow_prom.py
+
+[Install]
+WantedBy=multi-user.target

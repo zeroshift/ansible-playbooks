@@ -7,3 +7,10 @@
     daemon-reload: yes
   when: grow_monitor_enabled | default(true) | bool
 
+- name: Restart grow_prom
+  become: yes
+  systemd:
+    name: grow_prom.service
+    state: restarted
+    daemon-reload: yes
+  when: grow_prom_enabled | default(true) | bool
