@@ -33,3 +33,11 @@ data:
               summary: "Failed alerts for {{ $labels.integration }}"
               description: "Alertmanager was unable to send alerts to {{ $labels.integration }}"
               {% endraw %}
+          {% for alert_rule in prometheus_custom_alerts|default([]) %}
+
+          - alert: {{ alert_rule.alert }}
+            expr: {{ alert_rule.expr }}
+            for: {{ alert_rule.for }}
+            labels: {{ alert_rule.labels }}
+            annotations: {{ alert_rule.annotations }}
+          {% endfor %}
