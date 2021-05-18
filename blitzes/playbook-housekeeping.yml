@@ -1,5 +1,5 @@
 ---
-- hosts: workstations:personal_servers
+- hosts: workstations:personal_servers:wsl
   gather_facts: yes
   become: yes
   pre_tasks:
