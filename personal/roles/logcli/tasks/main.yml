@@ -1,14 +1,15 @@
 ---
 - name: Create dest dir
   file:
-    path: "/tmp/logcli-linux-{{ logcli_version}}-{{ logcli_arch }}"
+    path: "/tmp/logcli-linux-{{ logcli_version }}-{{ logcli_arch }}"
     state: directory
+    mode: 02700
   delegate_to: localhost
 
 - name: Download logcli binary to local folder
   get_url:
     url: "https://github.com/grafana/loki/releases/download/v{{ logcli_version }}/logcli-linux-{{ logcli_arch }}.zip"
-    dest: "/tmp/logcli-linux-{{ logcli_version}}-{{ logcli_arch}}/logcli-linux-{{ logcli_arch }}.zip"
+    dest: "/tmp/logcli-linux-{{ logcli_version }}-{{ logcli_arch }}/logcli-linux-{{ logcli_arch }}.zip"
     checksum: "sha256:{{ logcli_checksum[logcli_version][logcli_arch] }}"
   register: _download_binary
   until: _download_binary is succeeded
@@ -19,15 +20,15 @@
 
 - name: Unpack logcli binary
   unarchive:
-    src: "/tmp/logcli-linux-{{ logcli_version}}-{{ logcli_arch}}/logcli-linux-{{ logcli_arch }}.zip"
-    dest: "/tmp/logcli-linux-{{ logcli_version}}-{{ logcli_arch}}"
-    creates: "/tmp/logcli-linux-{{ logcli_version}}-{{ logcli_arch}}/logcli-linux-{{ logcli_arch }}"
+    src: "/tmp/logcli-linux-{{ logcli_version }}-{{ logcli_arch }}/logcli-linux-{{ logcli_arch }}.zip"
+    dest: "/tmp/logcli-linux-{{ logcli_version }}-{{ logcli_arch }}"
+    creates: "/tmp/logcli-linux-{{ logcli_version }}-{{ logcli_arch }}/logcli-linux-{{ logcli_arch }}"
   delegate_to: localhost
   when: not ansible_check_mode
 
 - name: Propagate logcli binaries
   copy:
-    src: "/tmp/logcli-linux-{{ logcli_version}}-{{ logcli_arch}}/logcli-linux-{{ logcli_arch }}"
+    src: "/tmp/logcli-linux-{{ logcli_version }}-{{ logcli_arch }}/logcli-linux-{{ logcli_arch }}"
     dest: "{{ logcli_binary_install_dir }}/logcli"
     mode: 0755
     owner: "{{ ansible_user }}"

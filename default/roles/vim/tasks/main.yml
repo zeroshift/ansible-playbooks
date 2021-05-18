@@ -11,6 +11,7 @@
   copy:
     src: files/vim/
     dest: ~/.vim/
+    mode: 0600
 
 - name: Git clone vim plugins
   git:

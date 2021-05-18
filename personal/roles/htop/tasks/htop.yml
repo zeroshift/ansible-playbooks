@@ -3,7 +3,7 @@
 - name: "Download htop-{{ htop_version }}"
   get_url:
     url: "{{ htop_url }}"
-    dest: "/tmp/htop-{{ htop_version}}.tar.gz"
+    dest: "/tmp/htop-{{ htop_version }}.tar.gz"
     checksum: "sha256:{{ htop_checksum }}"
 
 - name: "Untar htop-{{ htop_version }}"
