@@ -1,5 +1,5 @@
 ---
-- hosts: personal_workstations:personal_servers
+- hosts: node
   gather_facts: no
   serial:
     - 1
@@ -13,10 +13,49 @@
       when: confirm|bool
 
     - name: Drain node
-      command: "kubectl drain {{ inventory_hostname.split('.') | first }}"
+      command: "kubectl drain {{ inventory_hostname.split('.') | first }} --ignore-daemonsets"
       delegate_to: localhost
       when: "inventory_hostname in groups['k3s_cluster']"
       ignore_errors: true
+
+    - name: "Reboot {{ inventory_hostname }}"
+      reboot:
+      become: yes
+
+    - name: Mark node as ready
+      command: "kubectl uncordon {{ inventory_hostname.split('.') | first }}"
+      delegate_to: localhost
+      when: "inventory_hostname in groups['k3s_cluster']"
+
+- hosts: master
+  gather_facts: no
+  serial:
+    - 1
+  max_fail_percentage: '0%'
+  vars:
+    confirm: true
+  tasks:
+    - name: Pause for confirm
+      pause:
+        prompt: "Confirm reboot of {{ inventory_hostname }}"
+      when: confirm|bool
+
+    - name: "Reboot {{ inventory_hostname }}"
+      reboot:
+      become: yes
+
+- hosts: personal_workstations:personal_servers:!k3s_cluster
+  gather_facts: no
+  serial:
+    - 1
+  max_fail_percentage: '0%'
+  vars:
+    confirm: true
+  tasks:
+    - name: Pause for confirm
+      pause:
+        prompt: "Confirm reboot of {{ inventory_hostname }}"
+      when: confirm|bool
 
     - name: "Reboot {{ inventory_hostname }}"
       reboot:
