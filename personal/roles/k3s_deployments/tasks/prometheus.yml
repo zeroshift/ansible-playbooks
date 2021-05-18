@@ -88,6 +88,7 @@
                     cpu: "1"
                     memory: "128Mi"
             restartPolicy: Always
+            hostAliases: "{{ prometheus_host_aliases|default([]) }}"
             volumes:
               - name: prometheus-config-volume
                 configMap:
