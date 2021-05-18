@@ -4,10 +4,14 @@
     file: "{{ deployment }}"
   loop:
     # - loki.yml
-    - grafana.yml
-    - prometheus.yml
-    - alertmanager.yml
+    - metallb.yml
+    # - grafana.yml
+    - grafana-helm.yml
+    # - prometheus.yml
+    - prometheus-helm.yml
+    # - alertmanager.yml
+    # - pushgateway-helm.yml
     # - consul.yml
-    - pihole.yml
+    # - pihole.yml
   loop_control:
     loop_var: "deployment"

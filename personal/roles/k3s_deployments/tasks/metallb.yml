@@ -1,0 +1,14 @@
+---
+# TODO: Automate this deployment
+# Just installed with:
+# kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.6/manifests/namespace.yaml
+# kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.6/manifests/metallb.yaml
+# On first install only
+# kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+
+- name: Deploy metallb configMap
+  community.kubernetes.k8s:
+    state: present
+    definition: "{{ lookup('template', 'metallb_configMap.yml.j2') | from_yaml }}"
+    validate:
+      fail_on_error: yes

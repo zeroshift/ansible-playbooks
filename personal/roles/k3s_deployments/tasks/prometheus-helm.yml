@@ -1,0 +1,65 @@
+---
+- name: Deploy prometheus-community repo
+  community.kubernetes.helm_repository:
+    name: prometheus-community
+    repo_url: https://prometheus-community.github.io/helm-charts
+  run_once: true
+  delegate_to: localhost
+
+- name: Deploy kube-state-metrics repo
+  community.kubernetes.helm_repository:
+    name: kube-state-metrics
+    repo_url: https://kubernetes.github.io/kube-state-metrics
+  run_once: true
+  delegate_to: localhost
+
+- name: Create monitoring namespace
+  k8s:
+    name: monitoring
+    api_version: v1
+    kind: Namespace
+    state: present
+  run_once: true
+  delegate_to: localhost
+
+- name: Deploy Prometheus chart
+  community.kubernetes.helm:
+    name: prometheus
+    chart_ref: prometheus-community/prometheus
+    chart_version: 14.0.0
+    update_repo_cache: yes
+    release_namespace: monitoring
+    values:
+      nodeExporter:
+        enabled: false
+      alertmanager:
+        service:
+          type: LoadBalancer
+          loadBalancerIP: "{{ alertmanager_server|default('') }}"
+      pushgateway:
+        service:
+          type: LoadBalancer
+          loadBalancerIP: "{{ pushgateway_server|default('') }}"
+      server:
+        service:
+          type: LoadBalancer
+          loadBalancerIP: "{{ prometheus_server|default('') }}"
+        hostAliases: "{{ prometheus_host_aliases|default([]) }}"
+      extraScrapeConfigs: "{{ lookup('template', 'prometheus_extraScrapeConfigs.yml.j2') }}"
+      serverFiles:
+        alerting_rules.yml: "{{ lookup('template', 'prometheus_alerting_rules.yml.j2') | from_yaml }}"
+      alertmanagerFiles:
+        alertmanager.yml:
+          route:
+            group_wait: 1m
+            receiver: pushover
+            repeat_interval: 24h
+          receivers:
+            - name: pushover
+              pushover_configs:
+                - user_key: "{{ pushover_user_key }}"
+                  token: "{{ pushover_token }}"
+                  priority: 0
+                  send_resolved: true
+  run_once: true
+  delegate_to: localhost

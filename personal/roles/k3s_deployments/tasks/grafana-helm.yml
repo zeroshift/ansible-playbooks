@@ -1,0 +1,94 @@
+---
+- name: Deploy grafana repo
+  community.kubernetes.helm_repository:
+    name: grafana
+    repo_url: https://grafana.github.io/helm-charts
+  run_once: true
+  delegate_to: localhost
+
+- name: Create monitoring namespace
+  k8s:
+    name: monitoring
+    api_version: v1
+    kind: Namespace
+    state: present
+  run_once: true
+  delegate_to: localhost
+
+# - name: Get a list of all service objects
+#   community.kubernetes.k8s_info:
+#     api_version: v1
+#     kind: Service
+#     namespace: monitoring
+#     field_selectors:
+#       - metadata.name=prometheus-server
+#   register: service_list
+#
+# - name: Set our prometheus URL
+#   set_fact:
+#     prom_url: "http://{{ service_list.resources | json_query('[].spec.[clusterIP,ports[0].targetPort|to_string(@)]') | first | join(':') }}"
+
+- name: Deploy Grafana chart
+  community.kubernetes.helm:
+    name: grafana
+    update_repo_cache: yes
+    chart_ref: grafana/grafana
+    chart_version: 6.8.3
+    release_namespace: monitoring
+    values:
+      adminPassword: "{{ grafana_admin_password }}"
+      persistence:
+        enabled: true
+      service:
+        type: LoadBalancer
+        # port: 3000
+      # NOTE: needs amd64
+      # plugins:
+      #   - "grafana-image-renderer"
+      datasources:
+        datasources.yaml:
+          apiVersion: 1
+          datasources:
+            - name: Prometheus
+              type: prometheus
+              url: "http://prometheus-server.monitoring.svc"
+              isDefault: true
+      resources:
+        limits:
+          cpu: "2"
+          memory: "512Mi"
+        requests:
+          cpu: "1"
+          memory: "128Mi"
+      dashboardProviders:
+        dashboardproviders.yaml:
+          apiVersion: 1
+          providers:
+            - name: 'default'
+              orgId: 1
+              folder: ''
+              type: file
+              disableDeletion: false
+              editable: true
+              options:
+                path: /var/lib/grafana/dashboards/default
+      dashboards:
+        default:
+          node-exporter-full:
+            gnetId: 1860
+            revision: 23
+            datasource: Prometheus
+          enviro-plus:
+            json: "{{ lookup('file', 'grafana/EnviroPlus.json') | from_json | to_json }}"
+            datasource: Prometheus
+          grow-pi:
+            json: "{{ lookup('file', 'grafana/GrowPi.json') | from_json | to_json }}"
+            datasource: Prometheus
+          host-overview:
+            json: "{{ lookup('file', 'grafana/HostOverview.json') | from_json | to_json }}"
+            datasource: Prometheus
+          wireguard:
+            json: "{{ lookup('file', 'grafana/Wireguard.json') | from_json | to_json }}"
+            datasource: Prometheus
+  run_once: true
+  delegate_to: localhost
