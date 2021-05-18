@@ -169,7 +169,6 @@
         creates: "/etc/rancher/k3s/k3s_with_hostname.yaml"
       become: yes
       tags:
-        - k3s_deployments
         - k3s
         - kubeconfig
 
@@ -180,10 +179,10 @@
         replace: "{{ groups['master'] | first }}"
       become: yes
       tags:
-        - k3s_deployments
         - k3s
         - kubeconfig
 
+    # NOTE: If helm is complaining about connecting try "kubectl config view --raw >~/.kube/config.helm && mv ~/.kube/config{.helm,}"
     - name: Write kubeconfig
       fetch:
         src: "/etc/rancher/k3s/k3s_with_hostname.yaml"
@@ -191,7 +190,16 @@
         flat: yes
       become: yes
       tags:
-        - k3s_deployments
+        - k3s
+        - kubeconfig
+
+    - name: Set perms on kubeconfig
+      file:
+        path: ~/.kube/config
+        owner: "{{ ansible_user }}"
+        mode: 0600
+      become: no
+      tags:
         - k3s
         - kubeconfig
 
