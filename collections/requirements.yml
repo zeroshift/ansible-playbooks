@@ -1,6 +1,3 @@
 ---
 collections:
-  - general.homebrew
-  - general.homebrew_cask
-  - general.homebrew_tap
-  - general.snap
+  - community.general
