@@ -12,6 +12,6 @@
     # - alertmanager.yml
     # - pushgateway-helm.yml
     # - consul.yml
-    # - pihole.yml
+    - pihole.yml
   loop_control:
     loop_var: "deployment"

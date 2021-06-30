@@ -17,7 +17,7 @@
   community.kubernetes.helm:
     name: pihole
     chart_ref: mojo2600/pihole
-    chart_version: 1.7.21
+    chart_version: 1.9.1
     release_namespace: pihole
     values: "{{ pihole_helm_values }}"
   run_once: true

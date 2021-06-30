@@ -41,6 +41,7 @@
           type: LoadBalancer
           loadBalancerIP: "{{ pushgateway_server|default('') }}"
       server:
+        retention: 90d
         service:
           type: LoadBalancer
           loadBalancerIP: "{{ prometheus_server|default('') }}"

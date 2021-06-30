@@ -33,18 +33,27 @@
     name: grafana
     update_repo_cache: yes
     chart_ref: grafana/grafana
-    chart_version: 6.8.3
+    chart_version: 6.12.1
     release_namespace: monitoring
     values:
       adminPassword: "{{ grafana_admin_password }}"
       persistence:
         enabled: true
-      service:
-        type: LoadBalancer
-        # port: 3000
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: traefik
+        path: /
+        hosts:
+          - "{{ grafana_ingress_dns }}"
+      # service:
+      #  type: LoadBalancer
       # NOTE: needs amd64
       # plugins:
       #   - "grafana-image-renderer"
+      grafana.ini:
+        plugins:
+          enable_alpha: true
       datasources:
         datasources.yaml:
           apiVersion: 1
