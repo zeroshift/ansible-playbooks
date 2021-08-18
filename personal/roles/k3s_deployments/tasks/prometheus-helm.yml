@@ -25,8 +25,9 @@
 - name: Deploy Prometheus chart
   community.kubernetes.helm:
     name: prometheus
+    state: absent
     chart_ref: prometheus-community/prometheus
-    chart_version: 14.0.0
+    chart_version: 14.4.1
     update_repo_cache: yes
     release_namespace: monitoring
     values:
@@ -41,7 +42,10 @@
           type: LoadBalancer
           loadBalancerIP: "{{ pushgateway_server|default('') }}"
       server:
-        retention: 90d
+        retention: 60d
+        extraFlags:
+          - web.enable-lifecycle
+          - storage.tsdb.no-lockfile
         service:
           type: LoadBalancer
           loadBalancerIP: "{{ prometheus_server|default('') }}"

@@ -6,9 +6,9 @@
     # - loki.yml
     - metallb.yml
     # - grafana.yml
-    - grafana-helm.yml
+    # - grafana-helm.yml # This is in flux now
     # - prometheus.yml
-    - prometheus-helm.yml
+    # - prometheus-helm.yml  # This is in flux now
     # - alertmanager.yml
     # - pushgateway-helm.yml
     # - consul.yml

@@ -31,6 +31,7 @@
 - name: Deploy Grafana chart
   community.kubernetes.helm:
     name: grafana
+    state: absent
     update_repo_cache: yes
     chart_ref: grafana/grafana
     chart_version: 6.12.1
@@ -88,16 +89,16 @@
             revision: 23
             datasource: Prometheus
           enviro-plus:
-            json: "{{ lookup('file', 'grafana/EnviroPlus.json') | from_json | to_json }}"
+            file: "dashboards/EnviroPlus.json"
             datasource: Prometheus
           grow-pi:
-            json: "{{ lookup('file', 'grafana/GrowPi.json') | from_json | to_json }}"
+            file: "dashboards/GrowPi.json"
             datasource: Prometheus
           host-overview:
-            json: "{{ lookup('file', 'grafana/HostOverview.json') | from_json | to_json }}"
+            file: "dashboards/HostOverview.json"
             datasource: Prometheus
           wireguard:
-            json: "{{ lookup('file', 'grafana/Wireguard.json') | from_json | to_json }}"
+            file: "dashboards/Wireguard.json"
             datasource: Prometheus
   run_once: true
   delegate_to: localhost
