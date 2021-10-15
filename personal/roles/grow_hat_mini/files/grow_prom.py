@@ -89,7 +89,8 @@ def main():
     sensors = []
     for sensor_num in [1, 2, 3]:
         sensor = Moisture(sensor_num)
-        sensors.append(sensor)
+        if ("channel{0}".format(sensor_num)) in config.keys():
+            sensors.append(sensor)
 
     # Setup light sensor for reading
     light = LTR559()
@@ -113,26 +114,27 @@ def main():
         for i in range(0, 3):
             channel_num = i + 1
             channel_name = "channel{}".format(channel_num)
-            plant_name = config[channel_name]["name"]
+            if channel_name in config.keys():
+                plant_name = config[channel_name]["name"]
 
-            # Set wet/dry points
-            logging.debug("Setting wet/dry points.")
-            sensors[i].set_dry_point(config[channel_name]["dry_point"])
-            sensors[i].set_wet_point(config[channel_name]["wet_point"])
+                # Set wet/dry points
+                logging.debug("Setting wet/dry points.")
+                sensors[i].set_dry_point(config[channel_name]["dry_point"])
+                sensors[i].set_wet_point(config[channel_name]["wet_point"])
 
-            # Track soil moisture/saturation
-            logging.debug("Tracking soil moisture/saturation.")
-            soil_moisture.labels(channel_name, plant_name).set(sensors[i].moisture)
-            soil_saturation.labels(channel_name, plant_name).set(sensors[i].saturation)
+                # Track soil moisture/saturation
+                logging.debug("Tracking soil moisture/saturation.")
+                soil_moisture.labels(channel_name, plant_name).set(sensors[i].moisture)
+                soil_saturation.labels(channel_name, plant_name).set(sensors[i].saturation)
 
-            # Track wet/dry points
-            logging.debug("Tracking wet/dry points.")
-            soil_dry_point.labels(channel_name, plant_name).set(
-                config[channel_name]["dry_point"]
-            )
-            soil_wet_point.labels(channel_name, plant_name).set(
-                config[channel_name]["wet_point"]
-            )
+                # Track wet/dry points
+                logging.debug("Tracking wet/dry points.")
+                soil_dry_point.labels(channel_name, plant_name).set(
+                    config[channel_name]["dry_point"]
+                )
+                soil_wet_point.labels(channel_name, plant_name).set(
+                    config[channel_name]["wet_point"]
+                )
 
         # Update/track light sensor lux
         logging.debug("Updating light sensor.")

@@ -121,6 +121,7 @@
     state: "{{ grow_monitor_enabled | default(true) | ternary('started', 'stopped') }}"
     enabled: "{{ grow_monitor_enabled | default(true) | ternary('yes', 'no') }}"
     daemon-reload: yes
+
 - name: Deploy grow_prom script
   become: yes
   copy:
@@ -131,6 +132,36 @@
     group: root
     remote_src: no
   notify: Restart grow_prom
+
+- name: Deploy grow_prom service
+  become: yes
+  template:
+    src: "templates/grow_prom.service.j2"
+    dest: "/etc/systemd/system/grow_prom.service"
+    mode: 0644
+    owner: root
+    group: root
+    remote_src: no
+  notify: Restart grow_prom
+
+- name: Deploy water_pump script
+  become: yes
+  copy:
+    src: "files/water_pump.py"
+    dest: "/usr/local/bin/water_pump.py"
+    mode: 0755
+    owner: root
+    group: root
+    remote_src: no
+
+- name: Deploy water_pump cronjob
+  cron:
+    name: water_pump
+    user: pi
+    job: "/usr/local/bin/water_pump.py"
+    state: present
+    minute: "00"
+    hour: "10"
 
 - name: Deploy grow_prom service
   become: yes
