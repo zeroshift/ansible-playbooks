@@ -203,11 +203,11 @@
         - k3s
         - kubeconfig
 
-- hosts: localhost
-  connection: local
-  gather_facts: no
-  roles:
-    - name: k3s_deployments
-      tags:
-        - k3s_deployments
-        - k3s
+# - hosts: localhost
+#   connection: local
+#   gather_facts: no
+#   roles:
+#     - name: k3s_deployments
+#       tags:
+#         - k3s_deployments
+#         - k3s

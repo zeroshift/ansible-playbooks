@@ -55,21 +55,21 @@
       tags:
         - misc
 
-- hosts: all
-  connection: ssh
-  become: no
-
-  roles:
-    - role: base_directories
-      tags:
-        - git
-        - venv
-    - role: tmux
-      tags: tmux
-    - role: vim
-      tags: vim
-    - role: zsh
-      tags: zsh
+# - hosts: all
+#   connection: ssh
+#   become: no
+# 
+#   roles:
+#     - role: base_directories
+#       tags:
+#         - git
+#         - venv
+#     - role: tmux
+#       tags: tmux
+#     - role: vim
+#       tags: vim
+#     - role: zsh
+#       tags: zsh
 
 - hosts: servers
   connection: ssh
