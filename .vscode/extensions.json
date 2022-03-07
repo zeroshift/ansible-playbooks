@@ -1,0 +1,18 @@
+{
+    "recommendations": [
+        "samuelcolvin.jinjahtml",
+        "ms-vscode-remote.vscode-remote-extensionpack",
+        "vscodevim.vim",
+        "redhat.ansible",
+        "ms-azuretools.vscode-docker",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "yzhang.markdown-all-in-one",
+        "ryu1kn.partial-diff",
+        "quicktype.quicktype",
+        "ms-python.python",
+        "redhat.vscode-yaml",
+        "usernamehw.errorlens"
+    ]
+}

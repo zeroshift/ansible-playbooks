@@ -6,5 +6,3 @@ group_vars
 *.DS_Store
 *__pycache__
 work/
-.devcontainer
-.vscode
