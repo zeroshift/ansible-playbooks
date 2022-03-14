@@ -1,5 +1,4 @@
 ---
-
 - name: Linux default
   package:
     name: "{{ packages }}"
@@ -38,6 +37,26 @@
   when:
     - ansible_distribution != 'MacOSX'
     - "'workstations' in group_names or 'servers' in group_names"
+
+- name: LinuxBrew Packages
+  ansible.builtin.homebrew:
+    name: "{{ brew_packages }}"
+    state: present
+    # path: "/home/linuxbrew/.linuxbrew/bin"
+  vars:
+    brew_packages:
+      - "go-jsonnet"
+      - gcc
+      - gh
+      - helm
+      - jsonnet-bundler
+      - kind
+      - kubectl
+      - pyenv
+      - pyenv-virtualenv
+  when:
+    - ansible_distribution != 'MacOSX'
+    - "'workstations' in group_names or 'wsl' in group_names"
 
 - name: Linux default (GUI)
   package:
