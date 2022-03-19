@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "**/tasks/*.yml": "ansible"
+        "**/tasks/*.yml": "ansible",
+        "**/playbook-*.yml": "ansible"
     }
 }
