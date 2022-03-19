@@ -19,6 +19,7 @@
     state: present
   vars:
     packages:
+      - colima
       - git
       - grsync
       - htop-osx
