@@ -7,17 +7,11 @@
   become: yes
   vars:
     deb_packages:
-      - black
-      - httpie
       - ipython3
       - nocache
       - parallel
-      - python3-docker
-      - python3-kubernetes
       - python3-pip
-      - pylint
       - python3-virtualenv
-      - ranger
       - tmuxinator
       - util-linux
       - vim
@@ -35,7 +29,9 @@
       - openssh-client
       - openssh-server
       - nfs-common
-  when: "'workstations' in group_names or 'servers' in group_names"
+  when: >-
+    'workstations' in group_names
+    or 'personal_servers' in group_names
 
 - name: Debian/Ubuntu-specific (GUI)
   apt:
@@ -44,7 +40,6 @@
   become: yes
   vars:
     deb_packages:
-      - chromium-chromedriver
       - firefox
       - i3status
       - i3-wm
@@ -52,14 +47,10 @@
       - fonts-noto
       - fonts-noto-color-emoji
       - fonts-noto-cjk
-      # - slack
       - suckless-tools
       - nvidia-settings
       - remmina
       - terminator
-      - vagrant
-      - virtualbox
-      - virtualbox-dkms
       - w3m
       - wireshark-qt
       - xclip
@@ -74,20 +65,6 @@
   vars:
     ubu_packages:
       - gnome-tweak-tool
-  when:
-    - ansible_distribution == "Ubuntu"
-    - "'workstations' in group_names"
-
-- name: Ubuntu-specific Snaps
-  snap:
-    name: "{{ ubu_snaps }}"
-    state: present
-    classic: yes
-  become: yes
-  vars:
-    ubu_snaps:
-      - slack
-      # - vscode  # not showing available right now
   when:
     - ansible_distribution == "Ubuntu"
     - "'workstations' in group_names"

@@ -10,12 +10,9 @@
       - git
       - hardlink
       - htop
-      - jq
       - lbzip2
       - lsof
-      - nmap
       - pigz
-      - rclone
       - rsync
       - strace
       - sudo
@@ -23,8 +20,6 @@
       - tree
       - wget
       - zsh
-  when: ansible_distribution != 'MacOSX'
-
 - name: Linux Workstation/Server-default
   package:
     name: "{{ packages }}"
@@ -34,29 +29,30 @@
     packages:
       - chrony
       - tcpdump
-  when:
-    - ansible_distribution != 'MacOSX'
-    - "'workstations' in group_names or 'servers' in group_names"
+  when: >-
+    'workstations' in group_names
+    or 'personal_servers' in group_names
 
-- name: LinuxBrew Packages
-  ansible.builtin.homebrew:
-    name: "{{ brew_packages }}"
-    state: present
-    # path: "/home/linuxbrew/.linuxbrew/bin"
-  vars:
-    brew_packages:
-      - "go-jsonnet"
-      - gcc
-      - gh
-      - helm
-      - jsonnet-bundler
-      - kind
-      - kubectl
-      - pyenv
-      - pyenv-virtualenv
-  when:
-    - ansible_distribution != 'MacOSX'
-    - "'workstations' in group_names or 'wsl' in group_names"
+# - name: LinuxBrew Packages
+#   ansible.builtin.homebrew:
+#     name: "{{ linuxbrew_packages }}"
+#     state: present
+#   vars:
+#     linuxbrew_packages:
+#       - "go-jsonnet"
+#       - gcc
+#       - gh
+#       - helm
+#       - jsonnet-bundler
+#       - kind
+#       - kubectl
+#       - pyenv
+#       - pyenv-virtualenv
+#       - yq
+#       - jq
+#   when:
+#     - ansible_distribution != 'MacOSX'
+#     - "'workstations' in group_names or 'wsl' in group_names"
 
 - name: Linux default (GUI)
   package:
@@ -72,10 +68,7 @@
       - mpv
       - redshift
       - scrot
-      - streamlink
       - terminator
       - tilda
       - vlc
-  when:
-    - ansible_distribution != 'MacOSX'
-    - "'workstations' in group_names"
+  when: "'workstations' in group_names"

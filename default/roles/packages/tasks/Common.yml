@@ -1,0 +1,4 @@
+- name: Common Brew Packages
+  ansible.builtin.homebrew:
+    name: "{{ common_brew_packages }}"
+    state: present

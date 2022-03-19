@@ -1,10 +1,17 @@
 ---
+- include_tasks: Common.yml
+  when: >-
+    'workstations' in group_names
+    or 'wsl' in group_names
 
 - include_tasks: Linux.yml
   when: ansible_distribution != 'MacOSX'
 
 - include_tasks: "{{ ansible_distribution }}.yml"
-  when: ansible_distribution == "MacOSX" or ansible_distribution == "Archlinux" or ansible_distribution == "Gentoo"
+  when: >-
+    ansible_distribution == "MacOSX"
+    or ansible_distribution == "Archlinux"
+    or ansible_distribution == "Gentoo"
 
 - include_tasks: "{{ ansible_os_family }}.yml"
   when: ansible_os_family == "Debian"
@@ -15,11 +22,3 @@
     state: present
   become: yes
   when: "ansible_distribution in additional_packages.keys()"
-
-- name: "Install additional snaps for {{ ansible_distribution }}"
-  snap:
-    name: "{{ additional_snaps[ansible_distribution] }}"
-    state: present
-    classic: yes
-  become: yes
-  when: "ansible_distribution in additional_snaps.keys()"

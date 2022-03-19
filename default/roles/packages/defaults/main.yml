@@ -1,4 +1,19 @@
 ---
-
 additional_packages: {}
-additional_snaps: {}
+common_brew_packages:
+  - "go-jsonnet"
+  - ansible
+  - gcc
+  - gh
+  - helm
+  - httpie
+  - ipython
+  - jq
+  - jsonnet-bundler
+  - kind
+  - kubectl
+  - pre-commit
+  - pyenv
+  - pyenv-virtualenv
+  - rclone
+  - yq

@@ -1,46 +1,17 @@
 ---
-
-- name: Install python2
-  homebrew:
-    name: python2
-    state: present
-  become: no
-  ignore_errors: true
-
-- name: OSX | Install pip packages
-  pip:
-    name: "{{ modules }}"
-  become: no
-  vars:
-    modules:
-      - 'molecule[docker]'
-      - docker
-      - virtualenv
-  ignore_errors: true
-
-- name: OSX | Tap casks
-  homebrew_cask:
-    name: "{{ casks }}"
-    state: present
-  vars:
-    casks:
-      - chromedriver
-      - discord
-      - docker
-      - firefox
-      - glow
-      - google-chrome
-      - iina
-      - iterm2
-      - oracle-jdk
-      - slack
-      - streamlink-twitch-gui
-      - vagrant
-      - virtualbox
-      - virtualbox-extension-pack
-      - wireshark
-  become: no
-  ignore_errors: true
+# - name: OSX | Tap casks
+#   homebrew_cask:
+#     name: "{{ casks }}"
+#     state: present
+#   vars:
+#     casks:
+#       - discord
+#       # - docker
+#       - firefox
+#       - iterm2
+#       - wireshark
+#   become: no
+#   ignore_errors: true
 
 - name: MacOSX-specific
   homebrew:
@@ -48,23 +19,14 @@
     state: present
   vars:
     packages:
-      - ansible
       - git
       - grsync
       - htop-osx
-      - hub
-      - httpie
-      - ipython
-      - kubectl
-      - mutt
-      - nmap
-      - pre-commit
-      - socat
+      - secretive
       - ssh-copy-id
-      - testdisk
       - tmux
+      - tree
       - vim
       - wget
-      - zsh
   become: no
   ignore_errors: true
