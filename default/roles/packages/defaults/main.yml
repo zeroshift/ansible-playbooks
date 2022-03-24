@@ -3,8 +3,10 @@ additional_packages: {}
 common_brew_packages:
   - "go-jsonnet"
   - ansible
+  - docker-compose
   - gcc
   - gh
+  - go@1.17
   - helm
   - httpie
   - ipython
@@ -12,6 +14,7 @@ common_brew_packages:
   - jsonnet-bundler
   - kind
   - kubectl
+  - lastpass-cli
   - pre-commit
   - pyenv
   - pyenv-virtualenv
